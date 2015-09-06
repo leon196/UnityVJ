@@ -6,7 +6,7 @@ define(['../lib/pixi', '../core/utils'], function(PIXI, Utils)
   Engine.pause = false
   Engine.timeStarted = new Date() / 1000
   Engine.timeElapsed = 0
-  Engine.mouse = {x:0, y:0}
+  Engine.mouse = {x:0, y:0, down:false }
 
   Engine.init = function ()
   {
@@ -29,6 +29,12 @@ define(['../lib/pixi', '../core/utils'], function(PIXI, Utils)
 	Engine.onClic = function(event)
 	{
 		Engine.mouse = event.data.global
+  	Engine.mouse.down = true
+	}
+
+	Engine.onMouseUp = function(event)
+	{
+		Engine.mouse.down = false
 	}
 
   Engine.getWidth = function () { return window.innerWidth }

@@ -16,12 +16,22 @@ define(['../lib/pixi'], function (PIXI)
               ,uPixelSize:  { type: '1f', value: 1 }
               ,uBuffer: { type: 'sampler2D', value: 0 }
               ,uVideo: { type: 'sampler2D', value: 0 }
-              ,uFilter: { type: '1fv', value: new Float32Array([
+              ,uFilter5x5Gaussian: { type: '1fv', value: new Float32Array([
           			-1,-1,-1,-1,-1,
           			-1,-1,-1,-1,-1,
           			-1,-1,24,-1,-1,
           			-1,-1,-1,-1,-1,
           			-1,-1,-1,-1,-1]) }
+              ,uFilter5x5Neighbor: { type: '1fv', value: new Float32Array([
+                0.04,0.04,0.04,0.04,0.04,
+          			0.04,0.04,0.04,0.04,0.04,
+          			0.04,0.04,0.04,0.04,0.04,
+          			0.04,0.04,0.04,0.04,0.04,
+          			0.04,0.04,0.04,0.04,0.04]) }
+              ,uFilter3x3Neighbor: { type: '1fv', value: new Float32Array([
+                1/9,1/9,1/9,
+                1/9,1/9,1/9,
+                1/9,1/9,1/9]) }
           }
       );
   }
