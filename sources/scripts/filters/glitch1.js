@@ -11,9 +11,17 @@ define(['../lib/pixi'], function (PIXI)
           fragmentSrc,
           // custom uniforms
           {
-              dimensions: { type: '4fv', value: new Float32Array([0, 0, 0, 0]) },
-              pixelSize:  { type: '1f', value: 8 },
-              buffer: { type: 'sampler2D', value: 0 }
+              uResolution: { type: '2fv', value: new Float32Array([0, 0]) }
+              ,uTime:  { type: '1f', value: 0 }
+              ,uPixelSize:  { type: '1f', value: 1 }
+              ,uBuffer: { type: 'sampler2D', value: 0 }
+              ,uVideo: { type: 'sampler2D', value: 0 }
+              ,uFilter: { type: '1fv', value: new Float32Array([
+          			-1,-1,-1,-1,-1,
+          			-1,-1,-1,-1,-1,
+          			-1,-1,24,-1,-1,
+          			-1,-1,-1,-1,-1,
+          			-1,-1,-1,-1,-1]) }
           }
       );
   }
@@ -23,12 +31,25 @@ define(['../lib/pixi'], function (PIXI)
   Glitch1Filter.prototype.constructor = Glitch1Filter;
 
   Object.defineProperties(Glitch1Filter.prototype, {
-      size: {
-          get: function () {
-              return this.uniforms.pixelSize.value;
-          },
+      resolution: {
           set: function (value) {
-              this.uniforms.pixelSize.value = value;
+              this.uniforms.uResolution.value = value;
+          }
+      }
+  });
+
+  Object.defineProperties(Glitch1Filter.prototype, {
+      time: {
+          set: function (value) {
+              this.uniforms.uTime.value = value;
+          }
+      }
+  });
+
+  Object.defineProperties(Glitch1Filter.prototype, {
+      pixelSize: {
+          set: function (value) {
+              this.uniforms.uPixelSize.value = value;
           }
       }
   });
@@ -36,7 +57,15 @@ define(['../lib/pixi'], function (PIXI)
   Object.defineProperties(Glitch1Filter.prototype, {
       buffer: {
           set: function (value) {
-              this.uniforms.buffer.value = value;
+              this.uniforms.uBuffer.value = value;
+          }
+      }
+  });
+
+  Object.defineProperties(Glitch1Filter.prototype, {
+      video: {
+          set: function (value) {
+              this.uniforms.uVideo.value = value;
           }
       }
   });

@@ -1,20 +1,22 @@
 
-define(['../lib/jquery', '../lib/pixi', '../core/engine', '../base/video', '../filters/glitch1'], function($, PIXI, Engine, Video, Glitch1Filter)
+define(['../lib/jquery', '../lib/pixi', '../core/engine', '../base/video', '../filters/glitch1', '../core/keyboard'],
+function($, PIXI, Engine, Video, Glitch1Filter, Keyboard)
 {
   Engine.init()
 
-  var video = new Video('videos/vh1.ogv')
+  var video = new Video('videos/dance.mp4')
 
-  var background = new PIXI.Sprite(PIXI.Texture.fromVideo(video.DOM))
-  background.width = Engine.getWidth()
-  background.height = Engine.getHeight()
-  Engine.scene.addChild(background)
+  var backgroundVideo = new PIXI.Sprite(PIXI.Texture.fromVideo(video.DOM, PIXI.SCALE_MODES.NEAREST))
+  backgroundVideo.width = Engine.getWidth()
+  backgroundVideo.height = Engine.getHeight()
+  Engine.layerVideo.addChild(backgroundVideo)
 
-  var renderTexture1 = new PIXI.RenderTexture(Engine.renderer, Engine.getWidth(), Engine.getHeight());
-  var renderTexture2 = new PIXI.RenderTexture(Engine.renderer, Engine.getWidth(), Engine.getHeight());
+  var textureVideo = new PIXI.RenderTexture(Engine.renderer, Engine.getWidth(), Engine.getHeight(), PIXI.SCALE_MODES.NEAREST);
+  var textureBuffer = new PIXI.RenderTexture(Engine.renderer, Engine.getWidth(), Engine.getHeight(), PIXI.SCALE_MODES.NEAREST);
+  var textureDraw = new PIXI.RenderTexture(Engine.renderer, Engine.getWidth(), Engine.getHeight(), PIXI.SCALE_MODES.NEAREST);
 
-  Engine.stage.addChild(new PIXI.Sprite(renderTexture1))
-  //Engine.stage.addChild(new PIXI.Sprite(renderTexture2))
+  Engine.layerBuffer.addChild(new PIXI.Sprite(textureBuffer))
+  Engine.layerDraw.addChild(new PIXI.Sprite(textureDraw))
 
   var glitch1Filter;
   $.ajax({
@@ -23,7 +25,11 @@ define(['../lib/jquery', '../lib/pixi', '../core/engine', '../base/video', '../f
           async: true,
           success: function(src) {
               glitch1Filter = new Glitch1Filter(src)
-              Engine.scene.filters = [glitch1Filter]
+              Engine.layerBuffer.filters = [glitch1Filter]
+              glitch1Filter.video = textureVideo
+              glitch1Filter.buffer = textureBuffer
+              glitch1Filter.pixelSize = 2.0
+              glitch1Filter.resolution = new Float32Array([Engine.getWidth(), Engine.getHeight()])
           }
   });
 
@@ -31,17 +37,34 @@ define(['../lib/jquery', '../lib/pixi', '../core/engine', '../base/video', '../f
 	{
     Engine.update()
 
-    renderTexture1.render(Engine.scene)
+    if (Keyboard.P.down) {
+      Engine.pause = !Engine.pause
+      Keyboard.P.down = false
+    }
 
-		Engine.renderer.render(Engine.stage)
-    renderTexture2.render(Engine.stage)
+
+    if (!Engine.pause) {
+      textureVideo.render(Engine.layerVideo)
+    }
+
+    textureDraw.render(Engine.layerBuffer)
+		Engine.renderer.render(Engine.layerDraw)
+    textureBuffer.render(Engine.layerDraw)
+
 
     if (glitch1Filter) {
-      glitch1Filter.buffer = renderTexture2
+      glitch1Filter.time = Engine.timeElapsed
+      //glitch1Filter.pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
     }
 
 		requestAnimFrame(animate)
 	}
+
+  Engine.layerDraw.interactive = true
+  Engine.layerDraw.on('mousedown', Engine.onClic).on('touchstart', Engine.onClic)
+  Engine.layerDraw.on('mousemove', Engine.onMove).on('touchmove', Engine.onMove)
+  document.addEventListener('keydown', Keyboard.onKeyDown)
+  document.addEventListener('keyup', Keyboard.onKeyUp)
 
   animate()
 })

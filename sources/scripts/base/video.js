@@ -19,9 +19,7 @@ define([], function()
 				// Video Element
 				self.DOM.play()
 
-				// Texture Element
-				//self.texture = createTexture2d( gl, [ self.DOM.videoWidth , self.DOM.videoHeight ] )
-				//self.texture.setPixels( self.DOM )
+        self.shuffle()
 
 				self.isReady = true
 			}
@@ -33,11 +31,6 @@ define([], function()
     {
       this.DOM.currentTime = Math.random() * this.DOM.duration
     }
-
-  	this.update = function ()
-  	{
-  		//this.texture.setPixels(this.DOM)
-  	}
   }
 
   return Video
