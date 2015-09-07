@@ -10,6 +10,7 @@ define([], function()
   var Keyboard = {}
 
   Keyboard.P = new Key(80)
+  Keyboard.Space = new Key(32)
 
   Keyboard.onKeyDown = function (event)
   {

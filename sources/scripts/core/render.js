@@ -1,5 +1,5 @@
 
-define(['../lib/pixi', '../base/video', '../core/global'], function(PIXI, Video, Global)
+define(['../lib/pixi', '../base/video', '../core/global', '../core/keyboard'], function(PIXI, Video, Global, Keyboard)
 {
   var Render = {}
 
@@ -69,8 +69,12 @@ define(['../lib/pixi', '../base/video', '../core/global'], function(PIXI, Video,
     ++Render.frameCount
     if (Render.frameCount >= Render.frameSkip)
     {
+      Render.getFilter().time = Global.timeElapsed
+
       if (!Global.pause)
       {
+        // Render video
+        Render.textureVideo.render(Render.layerVideo)
         Render.getFilter().video = Render.textureVideo
       }
       else
@@ -78,12 +82,18 @@ define(['../lib/pixi', '../base/video', '../core/global'], function(PIXI, Video,
         Render.getFilter().video = Render.getTextureBuffer()
       }
 
-      Render.getFilter().time = Global.timeElapsed
 
-      // Render video
-      Render.textureVideo.render(Render.layerVideo)
-      // Send to shader previous frame
-      Render.getFilter().buffer = Render.getTextureBuffer()
+      if (Keyboard.Space.down)
+      {
+        Keyboard.Space.down = false
+        Render.getFilter().buffer = Render.textureVideo
+      }
+      else
+      {
+        // Send to shader previous frame
+        Render.getFilter().buffer = Render.getTextureBuffer()
+      }
+
       // Swap buffers (can not read and write a texture buffer a the same time)
       Render.nextBuffer()
       // Render effect
