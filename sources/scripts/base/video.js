@@ -16,11 +16,8 @@ define([], function()
   	this.DOM.addEventListener("canplaythrough", function () {
 			if ( self.isReady == false )
 			{
-				// Video Element
 				self.DOM.play()
-
         self.shuffle()
-
 				self.isReady = true
 			}
   	}
