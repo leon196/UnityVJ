@@ -58,21 +58,28 @@ function($, PIXI, Engine, Video, Glitch1Filter, Keyboard)
       offsetPan.y = Engine.mouse.y - panStart.y
     } else {
       panStarted = false
-        Engine.layerDraw.scale.x = Engine.layerDraw.scale.y = 1 + Engine.mouse.x * 8 / Engine.getWidth()
+        //Engine.layerDraw.scale.x = Engine.layerDraw.scale.y = 1 + Engine.mouse.x * 8 / Engine.getWidth()
     }
-    Engine.layerDraw.x = offsetPan.x + (Engine.layerDraw.scale.x - 1) * -Engine.getWidth() / 2
-    Engine.layerDraw.y = offsetPan.y + (Engine.layerDraw.scale.y - 1) * -Engine.getHeight() / 2
+    // Engine.layerDraw.x = offsetPan.x + (Engine.layerDraw.scale.x - 1) * -Engine.getWidth() / 2
+    // Engine.layerDraw.y = offsetPan.y + (Engine.layerDraw.scale.y - 1) * -Engine.getHeight() / 2
 
     ++tick
     if (tick >= frameRate) {
 
       if (!Engine.pause) {
         textureVideo.render(Engine.layerVideo)
+            if (glitch1Filter) {
+              glitch1Filter.video = textureVideo
+            }
+      } else {
+      if (glitch1Filter) {
+        glitch1Filter.video = textureBuffer
+      }
       }
 
-            textureDraw.render(Engine.layerBuffer)
-          Engine.renderer.render(Engine.layerDraw)
-          textureBuffer.render(Engine.layerDraw)
+      textureDraw.render(Engine.layerBuffer)
+      Engine.renderer.render(Engine.layerDraw)
+      textureBuffer.render(Engine.layerDraw)
 
       tick = 0
     }

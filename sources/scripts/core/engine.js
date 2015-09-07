@@ -14,6 +14,7 @@ define(['../lib/pixi', '../core/utils'], function(PIXI, Utils)
     Engine.layerVideo = new PIXI.Container()
     Engine.layerBuffer = new PIXI.Container()
     Engine.layerDraw = new PIXI.Container()
+    Engine.layerEmpty = new PIXI.Container()
 	}
 
   Engine.update = function ()
