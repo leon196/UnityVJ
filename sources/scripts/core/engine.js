@@ -1,12 +1,8 @@
 
-define(['../lib/pixi', '../core/utils', '../core/render', '../core/mouse', '../core/keyboard'],
-function(PIXI, Utils, Render, Mouse, Keyboard)
+define(['../lib/pixi', '../core/utils', '../core/render', '../core/mouse', '../core/keyboard', '../core/global'],
+function(PIXI, Utils, Render, Mouse, Keyboard, Global)
 {
   var Engine = {}
-
-  Engine.pause = false
-  Engine.timeStarted = new Date() / 1000
-  Engine.timeElapsed = 0
 
   Engine.init = function ()
   {
@@ -17,15 +13,18 @@ function(PIXI, Utils, Render, Mouse, Keyboard)
     Render.layerDraw.on('mousemove', Mouse.onMove).on('touchmove', Mouse.onMove)
     document.addEventListener('keydown', Keyboard.onKeyDown)
     document.addEventListener('keyup', Keyboard.onKeyUp)
+
+    Global.timeStarted = new Date() / 1000
+    Global.timeElapsed = 0
 	}
 
   Engine.update = function ()
   {
-    Engine.timeElapsed = new Date() / 1000 - Engine.timeStarted
+    Global.timeElapsed = new Date() / 1000 - Global.timeStarted
 
     if (Keyboard.P.down)
     {
-      Engine.pause = !Engine.pause
+      Global.pause = !Global.pause
       Keyboard.P.down = false
     }
 
@@ -33,7 +32,6 @@ function(PIXI, Utils, Render, Mouse, Keyboard)
     // Engine.layerDraw.x = offsetPan.x + (Engine.layerDraw.scale.x - 1) * -Engine.getWidth() / 2
     // Engine.layerDraw.y = offsetPan.y + (Engine.layerDraw.scale.y - 1) * -Engine.getHeight() / 2
 
-    Render.getFilter().time = Engine.timeElapsed
     //Render.getFilter().pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
 
     Render.update()

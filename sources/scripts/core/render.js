@@ -1,5 +1,5 @@
 
-define(['../lib/pixi', '../base/video'], function(PIXI, Video)
+define(['../lib/pixi', '../base/video', '../core/global'], function(PIXI, Video, Global)
 {
   var Render = {}
 
@@ -69,14 +69,16 @@ define(['../lib/pixi', '../base/video'], function(PIXI, Video)
     ++Render.frameCount
     if (Render.frameCount >= Render.frameSkip)
     {
-      if (!Render.pause)
+      if (!Global.pause)
       {
-        // Render.getFilter().video = Render.textureVideo
+        Render.getFilter().video = Render.textureVideo
       }
       else
       {
-        // Render.getFilter().video = Render.getTextureBuffer
+        Render.getFilter().video = Render.getTextureBuffer()
       }
+
+      Render.getFilter().time = Global.timeElapsed
 
       Render.textureVideo.render(Render.layerVideo)
       Render.getFilter().buffer = Render.getTextureBuffer()
