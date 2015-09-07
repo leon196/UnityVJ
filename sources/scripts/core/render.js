@@ -43,7 +43,7 @@ define(['../lib/pixi', '../base/video', '../core/global'], function(PIXI, Video,
   Render.filters = []
   Render.currentFilter = 0
   Render.frameCount = 0
-  Render.frameSkip = 0
+  Render.frameSkip = 2
 
   Render.addFilter = function (filter)
   {
@@ -80,11 +80,17 @@ define(['../lib/pixi', '../base/video', '../core/global'], function(PIXI, Video,
 
       Render.getFilter().time = Global.timeElapsed
 
+      // Render video
       Render.textureVideo.render(Render.layerVideo)
+      // Send to shader previous frame
       Render.getFilter().buffer = Render.getTextureBuffer()
+      // Swap buffers (can not read and write a texture buffer a the same time)
       Render.nextBuffer()
+      // Render effect
       Render.textureDraw.render(Render.getLayerBuffer())
+      // Draw on screen
       Render.renderer.render(Render.layerDraw)
+      // Save frame for persistence
       Render.getTextureBuffer().render(Render.layerDraw)
 
       Render.frameCount = 0

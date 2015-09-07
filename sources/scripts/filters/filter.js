@@ -1,8 +1,7 @@
 
 define(['../lib/pixi'], function (PIXI)
 {
-
-  function Glitch1Filter(fragmentSrc)
+  function Filter(fragmentSrc)
   {
       PIXI.AbstractFilter.call(this,
           // vertex shader
@@ -37,10 +36,10 @@ define(['../lib/pixi'], function (PIXI)
   }
 
 
-  Glitch1Filter.prototype = Object.create(PIXI.AbstractFilter.prototype);
-  Glitch1Filter.prototype.constructor = Glitch1Filter;
+  Filter.prototype = Object.create(PIXI.AbstractFilter.prototype);
+  Filter.prototype.constructor = Filter;
 
-  Object.defineProperties(Glitch1Filter.prototype, {
+  Object.defineProperties(Filter.prototype, {
       resolution: {
           set: function (value) {
               this.uniforms.uResolution.value = value;
@@ -48,7 +47,7 @@ define(['../lib/pixi'], function (PIXI)
       }
   });
 
-  Object.defineProperties(Glitch1Filter.prototype, {
+  Object.defineProperties(Filter.prototype, {
       time: {
           set: function (value) {
               this.uniforms.uTime.value = value;
@@ -56,7 +55,7 @@ define(['../lib/pixi'], function (PIXI)
       }
   });
 
-  Object.defineProperties(Glitch1Filter.prototype, {
+  Object.defineProperties(Filter.prototype, {
       pixelSize: {
           set: function (value) {
               this.uniforms.uPixelSize.value = value;
@@ -64,7 +63,7 @@ define(['../lib/pixi'], function (PIXI)
       }
   });
 
-  Object.defineProperties(Glitch1Filter.prototype, {
+  Object.defineProperties(Filter.prototype, {
       buffer: {
           set: function (value) {
               this.uniforms.uBuffer.value = value;
@@ -72,7 +71,7 @@ define(['../lib/pixi'], function (PIXI)
       }
   });
 
-  Object.defineProperties(Glitch1Filter.prototype, {
+  Object.defineProperties(Filter.prototype, {
       video: {
           set: function (value) {
               this.uniforms.uVideo.value = value;
@@ -80,5 +79,5 @@ define(['../lib/pixi'], function (PIXI)
       }
   });
 
-  return Glitch1Filter
+  return Filter
 })

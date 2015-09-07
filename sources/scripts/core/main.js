@@ -1,6 +1,6 @@
 
-define(['../lib/jquery', '../lib/pixi', '../core/engine', '../core/render', '../filters/glitch1'],
-function($, PIXI, Engine, Render, Glitch1Filter)
+define(['../lib/jquery', '../lib/pixi', '../core/engine', '../core/render', '../filters/filter'],
+function($, PIXI, Engine, Render, Filter)
 {
   var filtersPath = 'scripts/filters/'
   var filtersExtension = '.frag'
@@ -14,7 +14,7 @@ function($, PIXI, Engine, Render, Glitch1Filter)
 
   function loadedFilter (src)
   {
-    var filter = new Glitch1Filter(src)
+    var filter = new Filter(src)
     Render.addFilter(filter)
     ++filterLoaded
     if (filterLoaded == filtersToLoad.length)
