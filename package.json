@@ -1,7 +1,7 @@
 {
-  "name": "Ding",
+  "name": "DingDong",
   "version": "0.5.0",
-  "description": "Ding",
+  "description": "DingDong",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
