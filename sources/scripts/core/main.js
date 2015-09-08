@@ -4,7 +4,7 @@ function($, PIXI, Engine, Render, Filter)
 {
   var filtersPath = 'scripts/filters/'
   var filtersExtension = '.frag'
-  var filtersToLoad = ['glitch1']
+  var filtersToLoad = ['glitch1', 'kaleido']
   var filterLoaded = 0
 
   for (var f = 0; f < filtersToLoad.length; ++f)

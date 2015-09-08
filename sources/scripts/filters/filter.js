@@ -1,5 +1,5 @@
 
-define(['../lib/pixi'], function (PIXI)
+define(['../lib/pixi', '../core/global'], function (PIXI, Global)
 {
   function Filter(fragmentSrc)
   {
@@ -15,6 +15,7 @@ define(['../lib/pixi'], function (PIXI)
               ,uPixelSize:  { type: '1f', value: 1 }
               ,uBuffer: { type: 'sampler2D', value: 0 }
               ,uVideo: { type: 'sampler2D', value: 0 }
+              ,uBufferTreshold: { type: '1f', value: Global.bufferTreshold }
               ,uFilter5x5Gaussian: { type: '1fv', value: new Float32Array([
           			-1,-1,-1,-1,-1,
           			-1,-1,-1,-1,-1,
@@ -40,43 +41,28 @@ define(['../lib/pixi'], function (PIXI)
   Filter.prototype.constructor = Filter;
 
   Object.defineProperties(Filter.prototype, {
-      resolution: {
-          set: function (value) {
-              this.uniforms.uResolution.value = value;
-          }
-      }
+    resolution  :{set:function(value){
+      this.uniforms.uResolution.value  =value;}}
   });
-
   Object.defineProperties(Filter.prototype, {
-      time: {
-          set: function (value) {
-              this.uniforms.uTime.value = value;
-          }
-      }
+    time  :{set:function(value){
+      this.uniforms.uTime.value  =value;}}
   });
-
   Object.defineProperties(Filter.prototype, {
-      pixelSize: {
-          set: function (value) {
-              this.uniforms.uPixelSize.value = value;
-          }
-      }
+    pixelSize  :{set:function(value){
+      this.uniforms.uPixelSize.value  =value;}}
   });
-
   Object.defineProperties(Filter.prototype, {
-      buffer: {
-          set: function (value) {
-              this.uniforms.uBuffer.value = value;
-          }
-      }
+    buffer  :{set:function(value){
+      this.uniforms.uBuffer.value  =value;}}
   });
-
   Object.defineProperties(Filter.prototype, {
-      video: {
-          set: function (value) {
-              this.uniforms.uVideo.value = value;
-          }
-      }
+    video  :{set:function(value){
+      this.uniforms.uVideo.value  =value;}}
+  });
+  Object.defineProperties(Filter.prototype, {
+    bufferTreshold  :{set:function(value){
+      this.uniforms.uBufferTreshold.value  =value;}}
   });
 
   return Filter

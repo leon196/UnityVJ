@@ -1,5 +1,5 @@
 
-define(['../lib/pixi', '../base/video', '../core/global', '../core/keyboard'], function(PIXI, Video, Global, Keyboard)
+define(['../lib/pixi', '../base/video', '../core/global', '../base/keyboard'], function(PIXI, Video, Global, Keyboard)
 {
   var Render = {}
 
@@ -59,6 +59,12 @@ define(['../lib/pixi', '../base/video', '../core/global', '../core/keyboard'], f
     return Render.filters[Render.currentFilter]
   }
 
+  Render.nextFilter = function ()
+  {
+    Render.currentFilter = (Render.currentFilter + 1) % Render.filters.length
+    Render.layerDraw.filters = [Render.getFilter()]
+  }
+
   Render.init = function ()
   {
     Render.layerDraw.filters = [Render.getFilter()]
@@ -71,29 +77,10 @@ define(['../lib/pixi', '../base/video', '../core/global', '../core/keyboard'], f
     {
       Render.getFilter().time = Global.timeElapsed
 
-      if (!Global.pause)
-      {
-        // Render video
-        Render.textureVideo.render(Render.layerVideo)
-        Render.getFilter().video = Render.textureVideo
-      }
-      else
-      {
-        Render.getFilter().video = Render.getTextureBuffer()
-      }
-
-
-      if (Keyboard.Space.down)
-      {
-        Keyboard.Space.down = false
-        Render.getFilter().buffer = Render.textureVideo
-      }
-      else
-      {
-        // Send to shader previous frame
-        Render.getFilter().buffer = Render.getTextureBuffer()
-      }
-
+      // Send previous frame to shader
+      Render.getFilter().buffer = Render.getTextureBuffer()
+      // Render video
+      Render.textureVideo.render(Render.layerVideo)
       // Swap buffers (can not read and write a texture buffer a the same time)
       Render.nextBuffer()
       // Render effect

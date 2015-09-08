@@ -24,6 +24,16 @@ define([], function()
   		, true
   	)
 
+    this.play = function ()
+    {
+      this.DOM.play()
+    }
+
+    this.pause = function ()
+    {
+      this.DOM.pause()
+    }
+
     this.shuffle = function ()
     {
       this.DOM.currentTime = Math.random() * this.DOM.duration

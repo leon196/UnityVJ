@@ -1,6 +1,7 @@
 
-define(['../lib/pixi', '../core/utils', '../core/render', '../core/mouse', '../core/keyboard', '../core/global'],
-function(PIXI, Utils, Render, Mouse, Keyboard, Global)
+define(['../lib/pixi', '../core/utils', '../core/render', '../base/mouse', '../base/keyboard', '../core/global',
+'../base/animation'],
+function(PIXI, Utils, Render, Mouse, Keyboard, Global, Animation)
 {
   var Engine = {}
 
@@ -16,6 +17,11 @@ function(PIXI, Utils, Render, Mouse, Keyboard, Global)
 
     Global.timeStarted = new Date() / 1000
     Global.timeElapsed = 0
+
+    Engine.impulse = new Animation.add(false, 1, function(ratio){
+      ratio = 1 - Math.sin(ratio*Utils.PI2)
+      Render.getFilter().bufferTreshold = ratio * 0.5 + 0.25
+    })
 	}
 
   Engine.update = function ()
@@ -26,14 +32,36 @@ function(PIXI, Utils, Render, Mouse, Keyboard, Global)
     {
       Global.pause = !Global.pause
       Keyboard.P.down = false
+      if (Global.pause)
+      {
+        Render.video.pause()
+      }
+      else
+      {
+        Render.video.play()
+      }
+    }
+
+    if (Keyboard.Left.down)
+    {
+      Render.nextFilter()
+      Keyboard.Left.down = false
+    }
+
+    if (Keyboard.Space.down)
+    {
+      Engine.impulse.start()
+      Keyboard.Space.down = false
     }
 
     //Engine.layerDraw.scale.x = Engine.layerDraw.scale.y = 1 + Engine.mouse.x * 8 / Engine.getWidth()
     // Engine.layerDraw.x = offsetPan.x + (Engine.layerDraw.scale.x - 1) * -Engine.getWidth() / 2
     // Engine.layerDraw.y = offsetPan.y + (Engine.layerDraw.scale.y - 1) * -Engine.getHeight() / 2
 
+    Render.getFilter().time = Global.timeElapsed
     //Render.getFilter().pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
 
+    Animation.update()
     Render.update()
   }
 
