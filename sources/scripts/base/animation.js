@@ -1,5 +1,5 @@
 
-define(['../core/global', '../core/utils'], function(Global, Utils)
+define(['../base/global', '../base/utils'], function(Global, Utils)
 {
   var Timing = function (once, delay, onUpdate, onComplete)
   {

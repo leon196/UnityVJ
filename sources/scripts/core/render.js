@@ -1,5 +1,5 @@
 
-define(['../lib/pixi', '../base/video', '../core/global', '../base/keyboard'], function(PIXI, Video, Global, Keyboard)
+define(['../lib/pixi', '../media/video', '../base/global', '../control/keyboard'], function(PIXI, Video, Global, Keyboard)
 {
   var Render = {}
 

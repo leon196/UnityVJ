@@ -1,7 +1,8 @@
 
-define(['../lib/pixi', '../core/utils', '../core/render', '../base/mouse', '../base/keyboard', '../core/global',
-'../base/animation'],
-function(PIXI, Utils, Render, Mouse, Keyboard, Global, Animation)
+define(['../lib/pixi', '../core/render',
+'../control/mouse', '../control/keyboard',
+'../base/utils', '../base/global', '../base/animation'],
+function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
 {
   var Engine = {}
 
@@ -67,7 +68,6 @@ function(PIXI, Utils, Render, Mouse, Keyboard, Global, Animation)
 
   Engine.getWidth = function () { return window.innerWidth }
   Engine.getHeight = function () { return window.innerHeight }
-  window.onresize = function(event) { Engine.renderer.resize(Engine.getWidth(), Engine.getHeight()) }
 
   return Engine
 })
