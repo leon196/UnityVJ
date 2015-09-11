@@ -4,6 +4,7 @@ varying vec2 vTextureCoord;
 varying vec4 vColor;
 
 uniform float uTime;
+uniform float uFrequenceTotal;
 uniform float uPixelSize;
 uniform float uBufferTreshold;
 uniform float uFilter5x5Gaussian[25];
@@ -13,6 +14,7 @@ uniform vec2 uResolution;
 uniform sampler2D uSampler;
 uniform sampler2D uBuffer;
 uniform sampler2D uVideo;
+uniform sampler2D uFrequenceTexture;
 
 #define PI 3.141592653589
 #define PI2 6.283185307179
@@ -72,7 +74,7 @@ void main(void)
   vec2 center = vTextureCoord * 2.0 - 1.0;
   float dist = length(center);
   angle = atan(center.y, center.x);
-  vec2 offset = vec2(cos(angle), sin(angle)) * dist * 0.005;
+  vec2 offset = vec2(cos(angle), sin(angle)) * dist * 0.01 * uFrequenceTotal;
 
   // OFFSET FROM COLOR
   vec4 renderTarget = texture2D(uBuffer, uv);
@@ -80,7 +82,7 @@ void main(void)
   float lumBuffer = noise(renderTarget.rgb);
 
   angle = (lumBuffer + lumVideo) * PI2;
-  offset += vec2(cos(angle), sin(angle)) * 0.004;
+  offset += vec2(cos(angle), sin(angle)) * 0.005 * uFrequenceTotal;
   renderTarget = texture2D(uBuffer, uv - offset);
 
   // renderTarget.rgb *= 0.99;
@@ -89,14 +91,14 @@ void main(void)
   // vec4 neighbor = clamp(filter5x5(uFilter5x5Neighbor, uBuffer, uv - offset, uResolution), 0.0, 1.0);
   // renderTarget = mix(renderTarget, neighbor, 0.9);//luminance(renderTarget.rgb));
 
-  vec4 color = mix(renderTarget, video, step(uBufferTreshold, distance(video.rgb, renderTarget.rgb)));
+  vec4 color = mix(renderTarget, video, step(uFrequenceTotal, distance(video.rgb, renderTarget.rgb)));
   // vec4 color = mix(renderTarget, video, step(uBufferTreshold, luminance(abs(video.rgb - renderTarget.rgb))));
-
   // vec4 edge = clamp(filter5x5(uFilter5x5Gaussian, uBuffer, vTextureCoord, uResolution / 4.0), 0.0, 1.0);
   // vec4 edge = clamp(filter5x5(uFilter5x5Gaussian, uVideo, vTextureCoord, uResolution / 4.0) - 1.0, 0.0, 1.0);
   // float treshold = luminance(edge.rgb);
   // color = mix(color, video, treshold);
 
+  color.rgb = mix(vec3(1.0,0.0,0.0), color.rgb, clamp(step(0.01, vTextureCoord.x) + step(uFrequenceTotal, vTextureCoord.y), 0.0, 1.0));
 
   gl_FragColor = color;
 }

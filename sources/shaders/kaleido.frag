@@ -5,6 +5,7 @@ varying vec4 vColor;
 
 uniform float uTime;
 uniform float uPixelSize;
+uniform float uFrequenceTotal;
 uniform float uBufferTreshold;
 uniform float uFilter5x5Gaussian[25];
 uniform float uFilter5x5Neighbor[25];
@@ -65,7 +66,7 @@ void main(void)
   // renderTarget = mix(renderTarget, neighbor, 0.9);//luminance(renderTarget.rgb));
 
 
-  vec4 color = mix(renderTarget, video, step(uBufferTreshold, distance(video.rgb, renderTarget.rgb)));
+  vec4 color = mix(renderTarget, video, step(uFrequenceTotal, distance(video.rgb, renderTarget.rgb)));
 
   gl_FragColor = color;
 }

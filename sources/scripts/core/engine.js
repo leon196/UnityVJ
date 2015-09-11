@@ -59,11 +59,7 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
     // Engine.layerDraw.x = offsetPan.x + (Engine.layerDraw.scale.x - 1) * -Engine.getWidth() / 2
     // Engine.layerDraw.y = offsetPan.y + (Engine.layerDraw.scale.y - 1) * -Engine.getHeight() / 2
 
-    Render.getFilter().time = Global.timeElapsed
     //Render.getFilter().pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
-
-    Animation.update()
-    Render.update()
   }
 
   Engine.getWidth = function () { return window.innerWidth }
