@@ -72,6 +72,8 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
     // Engine.layerDraw.y = offsetPan.y + (Engine.layerDraw.scale.y - 1) * -Engine.getHeight() / 2
 
     //Render.getFilter().pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
+
+    Render.getFilter().mouse = Mouse
   }
 
   Engine.getWidth = function () { return window.innerWidth }

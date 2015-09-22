@@ -5,7 +5,10 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
   var Render = {}
 
   // PIXI WebGL renderer
-  Render.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {view:document.getElementById('container')})
+  Render.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+    view: document.getElementById('container')})
+    // ,resolution: 0.5
+    // ,antialias: true})
 
   // Layers
   Render.layerDraw = new PIXI.Container()
@@ -94,6 +97,7 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
       }
 
       Render.getFilter().pixelSize = 1 + Math.floor(6.0 * (Math.cos(Global.timeElapsed * 4.0) * 0.5 + 0.5));
+
 
       // Send previous frame to shader
       Render.getFilter().buffer = Render.getTextureBuffer()

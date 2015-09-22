@@ -12,6 +12,7 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
           {
               uResolution: { type: '2fv', value: new Float32Array([0, 0]) }
               ,uTime:  { type: '1f', value: 0 }
+              ,uMouse:  { type: '2fv', value: new Float32Array([0, 0]) }
               ,uPixelSize:  { type: '1f', value: 1 }
               ,uFrequenceTotal:  { type: '1f', value: 0 }
               ,uBuffer: { type: 'sampler2D', value: 0 }
@@ -48,6 +49,22 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
   Object.defineProperties(Filter.prototype, {
     time  :{set:function(value){
       this.uniforms.uTime.value  =value}}
+  })
+  Object.defineProperties(Filter.prototype, {
+    mouse  :{set:function(value){
+      this.uniforms.uMouse.value[0]  = value.x
+      this.uniforms.uMouse.value[1]  = value.y
+    }}
+  })
+  Object.defineProperties(Filter.prototype, {
+    mouseX  :{set:function(value){
+      this.uniforms.uMouse.value[0]  = value
+    }}
+  })
+  Object.defineProperties(Filter.prototype, {
+    mouseY  :{set:function(value){
+      this.uniforms.uMouse.value[1]  = value
+    }}
   })
   Object.defineProperties(Filter.prototype, {
     frequenceTotal  :{set:function(value){
