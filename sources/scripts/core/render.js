@@ -14,7 +14,7 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
   Render.layerBuffer2 = new PIXI.Container()
 
   // Medias
-  Render.video = new Video('videos/vh1.ogv')
+  Render.video = new Video()
   Render.spriteVideo = new PIXI.Sprite(PIXI.Texture.fromVideo(Render.video.DOM, PIXI.SCALE_MODES.NEAREST))
   Render.spriteVideo.width = window.innerWidth
   Render.spriteVideo.height = window.innerHeight
@@ -70,6 +70,12 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
     Render.layerDraw.filters = [Render.getFilter()]
   }
 
+  Render.previousFilter = function ()
+  {
+    Render.currentFilter = (Render.currentFilter - 1 + Render.filters.length) % Render.filters.length
+    Render.layerDraw.filters = [Render.getFilter()]
+  }
+
   Render.init = function ()
   {
     Render.layerDraw.filters = [Render.getFilter()]
@@ -85,30 +91,9 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
       if (UserMedia.isReady)
       {
         Render.getFilter().frequenceTotal = UserMedia.frequenceTotal
-                  // var gl = Render.renderer.gl
-        // if (Render.setupUserMedia == false)
-        // {
-        //   Render.setupUserMedia = true
-        //
-        //   var renderTexture = new PIXI.RenderTexture(Render.renderer, UserMedia.frequenceByteData.length, 1, PIXI.SCALE_MODES.NEAREST)
-        //   renderTexture.textureBuffer.texture = Render.textureUserMedia
-        //   console.log(renderTexture)
-        //
-        //   gl.bindTexture(gl.TEXTURE_2D, Render.textureUserMedia);
-        //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-        //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        //
-        //   var tmp = new Uint8Array(UserMedia.frequenceByteData.length);
-        //   gl.texImage2D(gl.TEXTURE_2D, 0, gl.ALPHA, UserMedia.frequenceByteData.length, 1, 0, gl.ALPHA, gl.UNSIGNED_BYTE, tmp);
-        //
-        // }
-
-        // gl.bindTexture(gl.TEXTURE_2D, Render.textureUserMedia);
-        // gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-        // gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, UserMedia.frequenceByteData, 1, gl.ALPHA, gl.UNSIGNED_BYTE, UserMedia.frequenceByteData);
       }
+
+      Render.getFilter().pixelSize = 1 + Math.floor(6.0 * (Math.cos(Global.timeElapsed * 4.0) * 0.5 + 0.5));
 
       // Send previous frame to shader
       Render.getFilter().buffer = Render.getTextureBuffer()

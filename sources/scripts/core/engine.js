@@ -45,14 +45,26 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
 
     if (Keyboard.Left.down)
     {
-      Render.nextFilter()
+      Render.previousFilter()
       Keyboard.Left.down = false
+    }
+
+    if (Keyboard.Right.down)
+    {
+      Render.nextFilter()
+      Keyboard.Right.down = false
     }
 
     if (Keyboard.Space.down)
     {
       Engine.impulse.start()
       Keyboard.Space.down = false
+    }
+
+    if (Keyboard.S.down)
+    {
+      Render.video.shuffle()
+      Keyboard.S.down = false
     }
 
     //Engine.layerDraw.scale.x = Engine.layerDraw.scale.y = 1 + Engine.mouse.x * 8 / Engine.getWidth()

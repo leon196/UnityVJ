@@ -22,6 +22,7 @@ uniform sampler2D uFrequenceTexture;
 #define RADTier 2.094395102
 #define RAD2Tier 4.188790205
 
+float rand(vec2 co){ return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453); }
 float luminance ( vec3 color ) { return (color.r + color.g + color.b) / 3.0; }
 vec2 pixelize(vec2 uv, vec2 segments) { return floor(uv * segments) / segments; }
 vec4 filter5x5 (float filter[25], sampler2D bitmap, vec2 uv, vec2 dimension)
@@ -60,45 +61,30 @@ float noise( vec3 x ) {
 
 void main(void)
 {
-  vec2 uv = pixelize(vTextureCoord, uResolution / uPixelSize);
+  vec2 uv = vTextureCoord;//pixelize(vTextureCoord, uResolution / uPixelSize);
 
-  // RGB OFFSET
   vec4 video = texture2D(uVideo, uv);
-  // float rgbOffsetRadius = 0.001;
-  // float angle = uTime * 2.0;
-  // video.r = texture2D(uVideo, uv + vec2(cos(angle), sin(angle)) * rgbOffsetRadius).r;
-  // video.g = texture2D(uVideo, uv + vec2(cos(angle + RADTier), sin(angle + RADTier)) * rgbOffsetRadius).g;
-  // video.b = texture2D(uVideo, uv + vec2(cos(angle + RAD2Tier), sin(angle + RAD2Tier)) * rgbOffsetRadius).b;
+  float t = cos(uTime * 2.0) * 0.5 + 0.5;
+  vec2 center = uv - vec2(0.5);
+  float dist = length(center.xx) * 4.0 * noise(vec3(center.yy * 1000.0, 0.0)) ;
+  // float angle = atan(center.y, center.x);//noise(video.rgb);
+  float dirX = mix(-1.0, 1.0,step(0.5, uv.x));
+  // float dirY = mix(-1.0, 1.0,step(0.5, uv.y));
+  vec2 offset = vec2(dirX,0.0) * 0.002 * (dist + 1.0);//vec2(0.5, 0.5) * angle * 0.4;
+  // vec2 offset = vec2(cos(angle), sin(angle)) * 0.001;
+  vec4 renderTarget = texture2D(uBuffer, uv - offset);
 
-  // OFFSET FROM CENTER
-  vec2 center = vTextureCoord * 2.0 - 1.0;
-  float dist = length(center);
-  float angle = atan(center.y, center.x);
-  vec2 offset = vec2(cos(angle), sin(angle)) * dist * 0.005;// * uFrequenceTotal;
+  float lum = luminance(renderTarget.rgb);
 
-  // OFFSET FROM COLOR
-  vec4 renderTarget = texture2D(uBuffer, uv);
-  float lumVideo = luminance(video.rgb);
-  float lumBuffer = noise(renderTarget.rgb);
+  renderTarget = texture2D(uBuffer, uv - offset * ((1.0-lum) + 1.0));
 
-  angle = (lumBuffer + lumVideo) * PI2;
-  offset += vec2(cos(angle), sin(angle)) * 0.004;// * uFrequenceTotal;
-  renderTarget = texture2D(uBuffer, uv - offset);
 
-  // renderTarget.rgb *= 0.99;
-  // renderTarget.rgb *= 1.01;
 
-  // vec4 neighbor = clamp(filter5x5(uFilter5x5Neighbor, uBuffer, uv - offset, uResolution), 0.0, 1.0);
-  // renderTarget = mix(renderTarget, neighbor, 0.9);//luminance(renderTarget.rgb));
+  renderTarget.rgb *= 0.99;
 
-  // vec4 color = mix(renderTarget, video, step(0.5, distance(video.rgb, renderTarget.rgb)));
-  vec4 color = mix(renderTarget, video, step(0.5, luminance(abs(video.rgb - renderTarget.rgb))));
-  vec4 edge = clamp(filter5x5(uFilter5x5Gaussian, uVideo, vTextureCoord, uResolution / 4.0) - 1.0, 0.0, 1.0);
-  // vec4 edge = clamp(filter5x5(uFilter5x5Gaussian, uVideo, vTextureCoord, uResolution / 4.0) - 1.0, 0.0, 1.0);
-  float treshold = luminance(edge.rgb);
-  color = mix(color, video, treshold);
-
-  //color.rgb = mix(vec3(1.0,0.0,0.0), color.rgb, clamp(step(0.01, vTextureCoord.x) + step(0.5, vTextureCoord.y), 0.0, 1.0));
-
+  vec4 color = mix(renderTarget, video, clamp(step(dist, t * 0.15 + 0.1), 0.0, 1.0));
+  // vec4 color = mix(renderTarget, video, step(dist, t * 0.25));
+  // vec4 color = mix(renderTarget, video, step(0.5, luminance(abs(video.rgb - renderTarget.rgb))));
+  // color.rgb = vec3(1.0) * dist;
   gl_FragColor = color;
 }

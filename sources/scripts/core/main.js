@@ -5,7 +5,7 @@ function($, PIXI, Engine, Render, Loader, UserMedia, Animation)
 {
   function init ()
   {
-    UserMedia.init()
+    // UserMedia.init()
     Render.init()
     Engine.init()
     animate()
@@ -13,7 +13,7 @@ function($, PIXI, Engine, Render, Loader, UserMedia, Animation)
 
   function animate ()
 	{
-    UserMedia.update()
+    // UserMedia.update()
     Animation.update()
     Engine.update()
     Render.update()
