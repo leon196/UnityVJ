@@ -1,17 +1,16 @@
 
-define([], function()
+define(['../base/utils'], function(Utils)
 {
   var Mouse = {}
 
   Mouse.x = 0
   Mouse.y = 0
   Mouse.down = false
+  Mouse.moveMode = true
 
   // Pan
-  Mouse.panX = 0
-  Mouse.panY = 0
-  Mouse.panStartX = 0
-  Mouse.panStartY = 0
+  Mouse.pan = {x:window.innerWidth/4, y:window.innerHeight/4}
+  Mouse.panStart = {x:0, y:0}
   Mouse.panStarted = false
 
 	Mouse.onMove = function(event)
@@ -20,8 +19,8 @@ define([], function()
 		Mouse.y = event.data.global.y
     if (Mouse.panStarted)
     {
-      Mouse.panX = Mouse.x - Mouse.panStartX
-      Mouse.panY = Mouse.y - Mouse.panStartY
+      Mouse.pan.x = Utils.clamp(Mouse.x - Mouse.panStart.x, 0, window.innerWidth)
+      Mouse.pan.y = Utils.clamp(Mouse.y - Mouse.panStart.y, 0, window.innerHeight)
     }
 	}
 
@@ -32,9 +31,17 @@ define([], function()
   	Mouse.down = true
 
     // Pan
-    Mouse.panStartX = Mouse.x - Mouse.panX
-    Mouse.panStartY = Mouse.y - Mouse.panY
+    Mouse.panStart.x = Mouse.x - Mouse.pan.x
+    Mouse.panStart.y = Mouse.y - Mouse.pan.y
     Mouse.panStarted = true
+
+    // Move mode
+    Mouse.moveMode = !Mouse.moveMode
+    if (Mouse.moveMode) {
+      document.getElementById('container').style.cursor = 'move'
+    } else {
+      document.getElementById('container').style.cursor = 'pointer'
+    }
 	}
 
 	Mouse.onMouseUp = function(event)

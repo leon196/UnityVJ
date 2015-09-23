@@ -4,7 +4,7 @@ define(['../lib/jquery', '../core/filter', '../core/render'], function($, Filter
   var Loader = {}
 
   Loader.filterLoaded = 0
-  Loader.filtersToLoad = ['fractal', 'raymarching', 'glitch3', 'glitch2', 'glitch1', 'kaleido']
+  Loader.filtersToLoad = ['fractal']//, 'raymarching', 'glitch3', 'glitch2', 'glitch1', 'kaleido']
 
   Loader.loadFilters = function (onComplete)
   {

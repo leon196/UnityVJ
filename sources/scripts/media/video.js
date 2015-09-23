@@ -4,7 +4,7 @@ define([], function()
   var Video = function ()
   {
   	this.isReady = false
-    this.URL = 'videos/HEY!6.mp4'
+    this.URL = 'videos/Hey ! Le Docu.mp4'
 
   	this.DOM = document.createElement('video')
   	this.DOM.preload = "auto"

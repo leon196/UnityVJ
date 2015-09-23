@@ -13,11 +13,15 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
               uResolution: { type: '2fv', value: new Float32Array([0, 0]) }
               ,uTime:  { type: '1f', value: 0 }
               ,uMouse:  { type: '2fv', value: new Float32Array([0, 0]) }
+              ,uMousePan:  { type: '2fv', value: new Float32Array([0, 0]) }
               ,uPixelSize:  { type: '1f', value: 1 }
               ,uFrequenceTotal:  { type: '1f', value: 0 }
               ,uBuffer: { type: 'sampler2D', value: 0 }
               ,uFrequenceTexture: { type: 'sampler2D', value: 0 }
+              ,uImage: { type: 'sampler2D', value: 0 }
               ,uVideo: { type: 'sampler2D', value: 0 }
+              ,uAngleX: { type: '1f', value: 0 }
+              ,uAngleY: { type: '1f', value: 0 }
               ,uBufferTreshold: { type: '1f', value: Global.bufferTreshold }
               ,uFilter5x5Gaussian: { type: '1fv', value: new Float32Array([
           			-1,-1,-1,-1,-1,
@@ -57,6 +61,12 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
     }}
   })
   Object.defineProperties(Filter.prototype, {
+    mousePan  :{set:function(value){
+      this.uniforms.uMousePan.value[0]  = value.x
+      this.uniforms.uMousePan.value[1]  = value.y
+    }}
+  })
+  Object.defineProperties(Filter.prototype, {
     mouseX  :{set:function(value){
       this.uniforms.uMouse.value[0]  = value
     }}
@@ -83,12 +93,24 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
       this.uniforms.uVideo.value  =value}}
   })
   Object.defineProperties(Filter.prototype, {
+    image  :{set:function(value){
+      this.uniforms.uImage.value  =value}}
+  })
+  Object.defineProperties(Filter.prototype, {
     frequenceTexture  :{set:function(value){
       this.uniforms.uFrequenceTexture.value  =value}}
   })
   Object.defineProperties(Filter.prototype, {
     bufferTreshold  :{set:function(value){
       this.uniforms.uBufferTreshold.value  =value}}
+  })
+  Object.defineProperties(Filter.prototype, {
+    angleX  :{set:function(value){
+      this.uniforms.uAngleX.value  =value}}
+  })
+  Object.defineProperties(Filter.prototype, {
+    angleY  :{set:function(value){
+      this.uniforms.uAngleY.value  =value}}
   })
 
   return Filter

@@ -15,6 +15,10 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
     Render.layerDraw.on('mousemove', Mouse.onMove).on('touchmove', Mouse.onMove)
     document.addEventListener('keydown', Keyboard.onKeyDown)
     document.addEventListener('keyup', Keyboard.onKeyUp)
+    Render.renderer.view.ondragover = Engine.ondragover;
+    Render.renderer.view.ondrop = Engine.ondrop;
+
+    document.getElementById('container').style.cursor = 'pointer'
 
     Global.timeStarted = new Date() / 1000
     Global.timeElapsed = 0
@@ -73,11 +77,42 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
 
     //Render.getFilter().pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
 
-    Render.getFilter().mouse = Mouse
+    if (Mouse.moveMode) {
+      Render.getFilter().mouse = Mouse
+    }
   }
 
   Engine.getWidth = function () { return window.innerWidth }
   Engine.getHeight = function () { return window.innerHeight }
+
+  // Drag and drop
+  // Thanks to JKirchartz and robertc
+  // http://stackoverflow.com/questions/7699987/html5-canvas-ondrop-event-isnt-firing
+  Engine.ondragover = function (e)
+  {
+      e.preventDefault()
+      console.log('hoi');
+      return false
+  }
+
+  Engine.ondrop = function (e)
+  {
+      e.preventDefault()
+      var file = e.dataTransfer.files[0],
+      reader = new FileReader()
+      reader.onload = function(event)
+      {
+          var img = new Image()
+          img.src = event.target.result
+          img.onload = function(event)
+          {
+              Render.textureImage = new PIXI.Texture(new PIXI.BaseTexture(this))
+              Render.getFilter().image = Render.textureImage
+          }
+      }
+      reader.readAsDataURL(file)
+      return false
+  }
 
   return Engine
 })

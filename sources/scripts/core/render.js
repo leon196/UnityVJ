@@ -6,9 +6,9 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
 
   // PIXI WebGL renderer
   Render.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
-    view: document.getElementById('container')})
+    view: document.getElementById('container')
     // ,resolution: 0.5
-    // ,antialias: true})
+    ,antialias: true})
 
   // Layers
   Render.layerDraw = new PIXI.Container()
@@ -21,6 +21,9 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
   Render.spriteVideo = new PIXI.Sprite(PIXI.Texture.fromVideo(Render.video.DOM, PIXI.SCALE_MODES.NEAREST))
   Render.spriteVideo.width = window.innerWidth
   Render.spriteVideo.height = window.innerHeight
+
+  // Image
+  Render.textureImage = PIXI.Texture.fromImage('images/background.jpg');
 
   // Render Textures
   Render.textureDraw = new PIXI.RenderTexture(Render.renderer, window.innerWidth, window.innerHeight, PIXI.SCALE_MODES.NEAREST)
@@ -57,6 +60,7 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
   {
     filter.video = Render.textureVideo
     filter.buffer = Render.getTextureBuffer()
+    filter.image = Render.textureImage
     filter.pixelSize = 2.0
     filter.resolution = new Float32Array([window.innerWidth, window.innerHeight])
     Render.filters.push(filter)
@@ -97,7 +101,6 @@ function(PIXI, Video, Global, Keyboard, UserMedia)
       }
 
       Render.getFilter().pixelSize = 1 + Math.floor(6.0 * (Math.cos(Global.timeElapsed * 4.0) * 0.5 + 0.5));
-
 
       // Send previous frame to shader
       Render.getFilter().buffer = Render.getTextureBuffer()
