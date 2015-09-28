@@ -25,14 +25,14 @@ uniform sampler2D uBuffer;
 uniform sampler2D uVideo;
 uniform sampler2D uImage;
 
-const int iter = 64;
+const int iter = 100;
 
 void main(void)
 {
   vec2 z = 2.0 * (vTextureCoord - vec2(0.5));
   z.x *= uResolution.x / uResolution.y;
 
-  vec2 c = uMouse / uResolution - 0.5;// * 2.0 - 1.0;
+  vec2 c = uMouse / uResolution * 2.0 - 1.0;
   c.x *= uResolution.x / uResolution.y;
   // c -= 1.0;
   c *= 2.0;
@@ -45,6 +45,8 @@ void main(void)
   {
     float x = (z.x * z.x - z.y * z.y) + c.x;
     float y = (z.y * z.x + z.x * z.y) + c.y;
+    // float x = ((z.x * z.x - z.y * z.y) + c.x) / (z.x - c.x);
+    // float y = ((z.y * z.x + z.x * z.y) + c.y) / (z.y - c.y);
 
     vec2 zMinusPoint = vec2(z.x - point.x, z.y - point.y);
     if(length(zMinusPoint) < d) {
@@ -68,7 +70,7 @@ void main(void)
   float ratio2 = length(z);
   // color.rgb = mix(color.rgb, vec3(0.0), ratio2);
   color.rgb = mix(vec3(1.0), color.rgb, color.a);
-  color.rgb = mix(color.rgb, vec3(0.0), clamp(ratio,0.0,1.0) * ratio2);
+  // color.rgb = mix(color.rgb, vec3(0.0), clamp(ratio,0.0,1.0) * ratio2);
   color.rgb = mix(color.rgb, vec3(0.0), d);
   // color.rgb = mix(color.rgb, vec3(0.0), sin(clamp(ratio,0.0,1.0)) * PI);
   // color.rgb = vec3(1.0) * clamp(z.x * z.y * z.z,  0.0, 1.0) * (1.0-ratio);

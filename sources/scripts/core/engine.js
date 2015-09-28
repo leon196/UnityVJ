@@ -80,6 +80,7 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
     if (Mouse.moveMode) {
       Render.getFilter().mouse = Mouse
     }
+      Render.getFilter().mousePan = Mouse.pan
   }
 
   Engine.getWidth = function () { return window.innerWidth }
