@@ -9,6 +9,8 @@ uniform float uFrequenceTotal;
 uniform float uBufferTreshold;
 uniform vec2 uResolution;
 uniform vec2 uMouse;
+uniform vec2 uMousePan;
+uniform vec3 uPosition;
 uniform float uAngleX;
 uniform float uAngleY;
 uniform sampler2D uSampler;
@@ -37,12 +39,12 @@ float luminance ( vec3 color ) { return (color.r + color.g + color.b) / 3.0; }
 // Raymarching
 const float rayEpsilon = 0.01;
 const float rayMin = 0.1;
-const float rayMax = 100.0;
-const int rayCount = 64;
-const int iter = 8;
+const float rayMax = 1e6;
+const int rayCount = 32;
+const int iter = 16;
 
 // Camera
-vec3 eye = vec3(0.01, 0.1, -2.5);
+vec3 eye = vec3(0.0001, 0.0001, 0.0001);
 vec3 front = vec3(0.0, 0.0, 1.0);
 vec3 right = vec3(1.0, 0.0, 0.0);
 vec3 up = vec3(0.0, 1.0, 0.0);
@@ -94,6 +96,13 @@ float sphere ( vec3 p, float s )
     return dot(p,n.xyz) + n.w;
   }
 
+  // polynomial smooth min (k = 0.1);
+  float smin( float a, float b, float k )
+  {
+   float h = clamp( 0.5+0.5*(b-a)/k, 0.0, 1.0 );
+   return mix( b, a, h ) - k*h*(1.0-h);
+  }
+
   vec3 rotateY(vec3 v, float t)
   {
       float cost = cos(t); float sint = sin(t);
@@ -106,33 +115,13 @@ float sphere ( vec3 p, float s )
       return vec3(v.x, v.y * cost - v.z * sint, v.y * sint + v.z * cost);
   }
 
-  float scene (vec3 p)
+  float scene (in vec3 p)
   {
-    // p += noise(p * 10.0 + vec3(0.0,0.0,uTime)) * 0.1;
-    // float sph = sphere(p, sphereRadius);
-    // float pla = plane(p, vec4(0.0, 1.0, 0.0, 0.0));
-    // return noise(p * 20.0 + vec3(0,0,uTime) + dot(eye, p) * 10.0) * (0.05 + 0.05* (sin(uTime * 10.0) * 0.5 + 0.5));
-
-
-      vec3 z;
-      vec3 c = p;//vec3(uMouse / uResolution * 2.0 - 1.0, cos(uTime));
-      z.x = p.x;//3.0 * (vTextureCoord.x - 0.5);
-      z.y = p.y;//2.0 * (vTextureCoord.y - 0.5);
-      z.z = 0.0;// * p.z;
-      int ii = 0;
-      for(int i=0; i<iter; i++) {
-        float x = (z.x * z.x - z.y * z.y) + c.x;
-        float y = (z.y * z.x + z.x * z.y) + c.y;
-        float zz = sin(p.y);//(z.z * z.z + z.z * z.z) + c.z;
-
-        ii++;
-        if((x * x + y * y) > 8.0) break;
-        z.x = x;
-        z.y = y;
-        // z.z = zz;
-      }
-
-      return length(z - p);
+    //p += noise(p * 10.0 + vec3(0.0,0.0,uTime)) * 0.1;
+    float pla = plane(p, vec4(0.0, -1.0, 0.0, 1.0 + 4.0 * (sin(uTime) * 0.5 + 0.5)));
+    p = mod(p, 2.0) - 1.0;
+    float sph = sphere(p, sphereRadius);
+    return smin(sph, pla, 0.25);
   }
 
   void main( void )
@@ -148,11 +137,14 @@ float sphere ( vec3 p, float s )
     float t = 0.0;
     for (int r = 0; r < rayCount; ++r)
     {
-      // Ray Position
-      vec3 p = eye + ray * t;
 
-      p = rotateY(p, uAngleX / uResolution.x);
-      p = rotateX(p, uAngleY / uResolution.y);
+      // Ray Position
+      vec3 p = ray * t;
+
+      p = rotateX(p, uMousePan.y / uResolution.y * 4.0);
+      p = rotateY(p, -uMousePan.x / uResolution.x * 4.0);
+
+      p += uPosition;
 
       float d = scene(p);
 
@@ -160,7 +152,11 @@ float sphere ( vec3 p, float s )
       if (d < rayEpsilon || t > rayMax)
       {
         // Shadow from ray count
-        color = mix(normalize(p) * 0.5 + 0.5, shadowColor, float(r) / float(rayCount));
+        // color = normalize(p) * 0.5 + 0.5;
+        uv = vec2(dot(eye,p) * 10000.0, p.y);
+        uv = mod(abs(uv), 1.0);
+        color = texture2D(uVideo, uv).rgb;
+        color = mix(color, shadowColor, float(r) / float(rayCount));
         // Sky color from distance
         color = mix(color, skyColor, smoothstep(rayMin, rayMax, t));
         break;

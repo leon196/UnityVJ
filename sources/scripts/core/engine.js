@@ -65,10 +65,20 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
       Keyboard.Space.down = false
     }
 
+    // if (Keyboard.S.down)
+    // {
+    //   Render.video.shuffle()
+    //   Keyboard.S.down = false
+    // }
+
+    if (Keyboard.W.down)
+    {
+      Keyboard.position.z += 0.01;
+    }
+
     if (Keyboard.S.down)
     {
-      Render.video.shuffle()
-      Keyboard.S.down = false
+      Keyboard.position.z -= 0.01;
     }
 
     //Engine.layerDraw.scale.x = Engine.layerDraw.scale.y = 1 + Engine.mouse.x * 8 / Engine.getWidth()
@@ -77,10 +87,9 @@ function(PIXI, Render, Mouse, Keyboard, Utils, Global, Animation)
 
     //Render.getFilter().pixelSize = 1.0 + Math.ceil(Engine.mouse.x * 8 / Engine.getWidth())
 
-    if (Mouse.moveMode) {
-      Render.getFilter().mouse = Mouse
-    }
-      Render.getFilter().mousePan = Mouse.pan
+    Render.getFilter().mouse = Mouse
+    Render.getFilter().mousePan = Mouse.pan
+    Render.getFilter().position = Keyboard.position
   }
 
   Engine.getWidth = function () { return window.innerWidth }

@@ -11,9 +11,12 @@ define([], function()
 
   Keyboard.P = new Key(80)
   Keyboard.S = new Key(83)
+  Keyboard.W = new Key(87)
   Keyboard.Space = new Key(32)
   Keyboard.Left = new Key(37)
   Keyboard.Right = new Key(39)
+
+  Keyboard.position = { x: 0.001, y: 0.001, z: 0.001 }
 
   Keyboard.onKeyDown = function (event)
   {

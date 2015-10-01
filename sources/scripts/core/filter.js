@@ -22,6 +22,7 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
               ,uVideo: { type: 'sampler2D', value: 0 }
               ,uAngleX: { type: '1f', value: 0 }
               ,uAngleY: { type: '1f', value: 0 }
+              ,uPosition: { type: '3f', value: new Float32Array([0, 0, 0]) }
               ,uBufferTreshold: { type: '1f', value: Global.bufferTreshold }
               ,uFilter5x5Gaussian: { type: '1fv', value: new Float32Array([
           			-1,-1,-1,-1,-1,
@@ -74,6 +75,13 @@ define(['../lib/pixi', '../base/global'], function (PIXI, Global)
   Object.defineProperties(Filter.prototype, {
     mouseY  :{set:function(value){
       this.uniforms.uMouse.value[1]  = value
+    }}
+  })
+  Object.defineProperties(Filter.prototype, {
+    position  :{set:function(value){
+      this.uniforms.uPosition.value[0]  = value.x
+      this.uniforms.uPosition.value[1]  = value.y
+      this.uniforms.uPosition.value[2]  = value.z
     }}
   })
   Object.defineProperties(Filter.prototype, {

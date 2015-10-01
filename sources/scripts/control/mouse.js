@@ -9,7 +9,7 @@ define(['../base/utils'], function(Utils)
   Mouse.moveMode = true
 
   // Pan
-  Mouse.pan = {x:window.innerWidth/4, y:window.innerHeight/4}
+  Mouse.pan = {x:0, y:0}
   Mouse.panStart = {x:0, y:0}
   Mouse.panStarted = false
 
@@ -19,8 +19,8 @@ define(['../base/utils'], function(Utils)
 		Mouse.y = event.data.global.y
     if (Mouse.panStarted)
     {
-      Mouse.pan.x = Utils.clamp(Mouse.x - Mouse.panStart.x, 0, window.innerWidth)
-      Mouse.pan.y = Utils.clamp(Mouse.y - Mouse.panStart.y, 0, window.innerHeight)
+      Mouse.pan.x = Mouse.x - Mouse.panStart.x//Utils.clamp(Mouse.x - Mouse.panStart.x, 0, window.innerWidth)
+      Mouse.pan.y = Mouse.y - Mouse.panStart.y//Utils.clamp(Mouse.y - Mouse.panStart.y, 0, window.innerHeight)
     }
 	}
 
