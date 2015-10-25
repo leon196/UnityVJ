@@ -1,4 +1,4 @@
-Shader "Warband/Tornado" {
+Shader "Warband/TriangleBeat" {
   Properties {
     _Color ("Color", Color) = (1,1,1,1)
     _MainTex ("Texture (RGB)", 2D) = "white" {}
@@ -39,7 +39,6 @@ Shader "Warband/Tornado" {
         fixed4 _Color;
         float _Size;
         float _GlobalFFT;
-        float _GlobalFFTTotal;
 
         float3 rotateY(float3 v, float t)
         {
@@ -52,30 +51,6 @@ Shader "Warband/Tornado" {
           return float3(v.x, v.y * cost - v.z * sint, v.y * sint + v.z * cost);
         }
 
-        // hash based 3d value noise
-        // function taken from https://www.shadertoy.com/view/XslGRr
-        // Created by inigo quilez - iq/2013
-        // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-
-        // ported from GLSL to HLSL
-        float hash( float n )
-        {
-          return frac(sin(n)*43758.5453);
-        }
-
-        float noise( float3 x )
-        {
-          // The noise function returns a value in the range -1.0f -> 1.0f
-          float3 p = floor(x);
-          float3 f = frac(x);
-          f       = f*f*(3.0-2.0*f);
-          float n = p.x + p.y*57.0 + 113.0*p.z;
-          return lerp(lerp(lerp( hash(n+0.0), hash(n+1.0),f.x),
-          lerp( hash(n+57.0), hash(n+58.0),f.x),f.y),
-          lerp(lerp( hash(n+113.0), hash(n+114.0),f.x),
-          lerp( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
-        }
-
 
         GS_INPUT vert (appdata_full v)
         {
@@ -85,12 +60,13 @@ Shader "Warband/Tornado" {
           float tt = _Time * 10.0;
           float radius = 5.0;
           float3 target = float3(cos(tt) * radius, 0.0, sin(tt) * radius);
-          float dist = 1.0 / log(length(position));
-          float fft = tex2Dlod(_TextureFFT, float4(clamp(sin(length(position) * 0.1) * 0.5 + 0.5, 0.0, 1.0), 0.0, 0, 0)).r;
-          /*fft = log(fft);*/
-          position = normalize(position) * (length(position) + fft * 100.0);
-          /*position = rotateY(position, fft * 0.1);// + _GlobalFFTTotal * 0.001);*/
-          /*v.vertex.xyz = rotateX(v.vertex.xyz, angle);*/
+          float dist = (length(position));
+          /*float n = ((v.normal.x + v.normal.y + v.normal.z) / 3.0) * 0.5 + 0.5;*/
+          float n = sin(dist * 0.1) * 0.5 + 0.5;
+          float fft = tex2Dlod(_TextureFFT, float4(clamp(n, 0.0, 1.0), 0.0, 0, 0)).r;
+          fft = log(fft);
+          position -= v.normal * _GlobalFFT;
+          /*position = rotateY(position, dist * 0.001 + fft * 0.1);*/
           /*position.x += sin(position.y);*/
           o.pos =  mul(UNITY_MATRIX_MVP, float4(position, 1.0));
           o.normal = v.normal;

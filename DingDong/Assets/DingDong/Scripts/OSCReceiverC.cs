@@ -19,6 +19,7 @@ public class OSCReceiverC : MonoBehaviour {
 
   Texture2D texture2D;
   Color[] colors;
+  float fftTotal;
   #endregion
 
   #region Monobehaviour Methods
@@ -31,6 +32,7 @@ public class OSCReceiverC : MonoBehaviour {
     }
     texture2D.SetPixels(colors);
     Shader.SetGlobalTexture("_TextureFFT", texture2D);
+    fftTotal = 0f;
   }
 
   void Start () {
@@ -55,10 +57,15 @@ public class OSCReceiverC : MonoBehaviour {
   void Update ()
   {
       float fft = 0f;
+      float fftGlobal = 0f;
       for (int i = 0; i < OSCcount; i++) {
-        fft = Mathf.Clamp(OSCvalues[i], 0f, 1f);
+        fft = OSCvalues[i];
         colors[i] = new Color(fft, fft, fft, 1f);
+        fftGlobal += fft;
       }
+      fftTotal += fftGlobal;
+      Shader.SetGlobalFloat("_GlobalFFT", fftGlobal);
+      Shader.SetGlobalFloat("_GlobalFFTTotal", fftTotal);
       texture2D.SetPixels(colors);
       texture2D.Apply(false);
   }
