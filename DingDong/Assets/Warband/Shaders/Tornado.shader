@@ -76,6 +76,15 @@ Shader "Warband/Tornado" {
           lerp( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
         }
 
+        float g (float x)
+        {
+          return 0.01 / log(fmod(abs(x),2.0));
+        }
+
+        float g2 (float x)
+        {
+          return log(abs(x)) + 2.0;
+        }
 
         GS_INPUT vert (appdata_full v)
         {
@@ -85,11 +94,13 @@ Shader "Warband/Tornado" {
           float tt = _Time * 10.0;
           float radius = 5.0;
           float3 target = float3(cos(tt) * radius, 0.0, sin(tt) * radius);
-          float dist = 1.0 / log(length(position));
-          float fft = tex2Dlod(_TextureFFT, float4(clamp(sin(length(position) * 0.1) * 0.5 + 0.5, 0.0, 1.0), 0.0, 0, 0)).r;
+          float dist = 1.0 / g2(length(position));//log(length(position));
+          /*float fft = tex2Dlod(_TextureFFT, float4(clamp(sin(length(position) * 0.1) * 0.5 + 0.5, 0.0, 1.0), 0.0, 0, 0)).r;*/
           /*fft = log(fft);*/
-          position = normalize(position) * (length(position) + fft * 100.0);
-          /*position = rotateY(position, fft * 0.1);// + _GlobalFFTTotal * 0.001);*/
+          float x = 1.0 - abs(fmod(length(v.vertex.xyz * 0.1) + tt, 1.0) * 2.0 - 1.0);
+          float fft = tex2Dlod(_TextureFFT, float4(x, 0, 0, 0)).r;
+          position = normalize(position) * (dist);
+          position = rotateY(position, dist * 2.0 + tt);// + _GlobalFFTTotal * 0.001);
           /*v.vertex.xyz = rotateX(v.vertex.xyz, angle);*/
           /*position.x += sin(position.y);*/
           o.pos =  mul(UNITY_MATRIX_MVP, float4(position, 1.0));
