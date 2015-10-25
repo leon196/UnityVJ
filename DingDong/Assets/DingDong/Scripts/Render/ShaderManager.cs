@@ -12,7 +12,7 @@ namespace DingDong
 			delayBeforeNewObject = 10f;
 
 			objects = Resources.LoadAll("Shaders");
-			materialEffect = GetComponentInChildren<Video>().GetComponent<Renderer>().material;
+			materialEffect = GameObject.FindObjectOfType<Video>().GetComponent<Renderer>().material;
 
 			UpdateShader();
 			UpdateRaymarching();

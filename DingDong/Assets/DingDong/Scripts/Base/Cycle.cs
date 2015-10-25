@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace DingDong
 {
-	public class Cycle : MonoBehaviour
+	public class Cycle
 	{
 		// Cycle through list of things (shader, videos)
 		public UnityEngine.Object[] objects;

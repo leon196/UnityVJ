@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace DingDong
 {
-	public class Main : MonoBehaviour
+	public class DingDong : MonoBehaviour
 	{
 		public bool cycleMode = false;
 
@@ -19,15 +19,6 @@ namespace DingDong
 			video = GetComponentInChildren<Video>();
 			sound = GetComponent<Sound>();
 			// sound.LoadAudioClip();
-		}
-
-		void Resize (float pixelSize)
-		{
-			if (renderTexture.PixelSize != pixelSize)
-			{
-				renderTexture.PixelSize = pixelSize;
-				renderTexture.Resize();
-			}
 		}
 
 		void Update ()
@@ -53,7 +44,6 @@ namespace DingDong
 				if (shader.IsItTimeToChange())
 				{
 					shader.NextShader();
-					CheckSpecials();
 				}
 			}
 
@@ -77,21 +67,6 @@ namespace DingDong
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
 				Application.Quit();
-			}
-		}
-
-		void CheckSpecials ()
-		{
-			if (shader.GetCurrentShader().name == "Custom/GlitchColorDirection"
-				|| shader.GetCurrentShader().name == "Custom/GlitchFatPixel"
-				|| shader.GetCurrentShader().name == "Custom/GlitchDistortion2"
-				|| shader.GetCurrentShader().name == "Custom/GlitchRain")
-			{
-				Resize(4f);
-			}
-			else
-			{
-				Resize(1f);
 			}
 		}
 	}
