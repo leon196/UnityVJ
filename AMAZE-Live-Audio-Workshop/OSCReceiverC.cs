@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-/* 
+/*
 	OSC RECEIVER C#
 	A modified version of this plugin - https://github.com/heaversm/unity-osc-receiver
 */
