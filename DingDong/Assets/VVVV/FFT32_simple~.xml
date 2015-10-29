@@ -9,7 +9,7 @@
    </BOUNDS>
    <BOUNDS type="Node" left="1245" top="300" width="0" height="0">
    </BOUNDS>
-   <PIN pinname="Input Enum" slicecount="1" values="|CABLE Output (VB-Audio Virtual Cable)|">
+   <PIN pinname="Input Enum" slicecount="1" values="|Mikrofon (Realtek High Definition Audio)|">
    </PIN>
    <PIN pinname="Descriptive Name" slicecount="1" values="|mic input switcher|">
    </PIN>
@@ -297,7 +297,7 @@
    </BOUNDS>
    <BOUNDS type="Box" left="1710" top="6870" width="360" height="255">
    </BOUNDS>
-   <PIN pinname="Y Input Value" slicecount="1" values="256">
+   <PIN pinname="Y Input Value" slicecount="1" values="32">
    </PIN>
    <PIN pinname="Precision" slicecount="1" values="0">
    </PIN>

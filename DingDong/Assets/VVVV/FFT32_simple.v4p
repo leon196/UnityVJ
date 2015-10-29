@@ -1,5 +1,5 @@
-<!DOCTYPE PATCH  SYSTEM "http://vvvv.org/versions/vvvv45beta33.3.dtd" >
-   <PATCH nodename="C:\Projects\AMAZE-Live-Audio-Workshop\VVVV patches\FFT32_simple.v4p" scrollx="0" scrolly="0" systemname="audioAnalysis" filename="C:\Projects\HelloWorldVJ\Assets\VVVV\audioAnalysis.v4p">
+<!DOCTYPE PATCH  SYSTEM "http://vvvv.org/versions/vvvv45beta34.2.dtd" >
+   <PATCH nodename="D:\DingDong\DingDong\Assets\VVVV\FFT32_simple.v4p" scrollx="0" scrolly="0" systemname="audioAnalysis" filename="C:\Projects\HelloWorldVJ\Assets\VVVV\audioAnalysis.v4p">
    <BOUNDS type="Window" left="5985" top="0" width="13215" height="11070">
    </BOUNDS>
    <PACK Name="addonpack" Version="33.3.0">
@@ -9,7 +9,7 @@
    </BOUNDS>
    <BOUNDS type="Node" left="1245" top="300" width="0" height="0">
    </BOUNDS>
-   <PIN pinname="Input Enum" slicecount="1" values="|Mikrofon (Realtek High Definition Audio)|">
+   <PIN pinname="Input Enum" slicecount="1" values="|CABLE Output (VB-Audio Virtual |">
    </PIN>
    <PIN pinname="Descriptive Name" slicecount="1" values="|mic input switcher|">
    </PIN>
@@ -201,7 +201,7 @@
    </BOUNDS>
    <BOUNDS type="Box" left="1185" top="4875" width="11895" height="1410">
    </BOUNDS>
-   <PIN pinname="Y Input Value" visible="1" slicecount="32" values="0.0622179384631955,0.28066429823877,0.930304015095801,1,1,0.233966898861725,0.943656732491153,0.325667420232535,0.0879552055946968,1,0.103163422398208,0.252129350615587,0.169649398237014,0.471047032929439,0.0898562306892019,0.119179913510974,0.111919942444809,0.0781713219118514,0.457836787454907,1,0.377936896830774,0.814143948984297,1,0.914170650494483,0.262752642389024,0.426131007214898,0.171976976214409,0.353173014253585,0.182064901262619,1,0.285100594707849,0.0746548113902721">
+   <PIN pinname="Y Input Value" visible="1" slicecount="32" values="0.226939803609401,1.5149021646037,0.769215193603618,1.51008949089898,0.261443293097542,0.632092179794372,0.173311224310444,0.0672112828255624,0.113104815078741,0.0498330590981382,0.162830694755648,0.212723745182613,0.258374643787196,0.078001905810611,1.37421517448828,0.305784362267646,0.537159466273952,0.507371860318814,0.372520011696182,1.52467435717084,0.445460482999491,0.498934530995979,0.675564065467461,0.812485779294339,0.755507089518006,0.140448470528068,0.130047351347317,0.0726005655077433,0.11794211523839,0.0585827757930418,0.0160019394602257,0.0132626140837474">
    </PIN>
    <PIN pinname="Descriptive Name" slicecount="1" values="|FFT resampled to 32|">
    </PIN>
@@ -268,8 +268,6 @@
    </NODE>
    <LINK srcnodeid="85" srcpinname="Output" dstnodeid="84" dstpinname="Input">
    </LINK>
-   <LINK srcnodeid="84" srcpinname="Center" dstnodeid="67" dstpinname="Y Input Value">
-   </LINK>
    <NODE id="89" systemname="IOBox (String)" nodename="IOBox (String)" componentmode="InABox">
    <PIN pinname="Input String" visible="1">
    </PIN>
@@ -329,7 +327,7 @@
    </BOUNDS>
    <PIN pinname="Y Output Value" visible="1">
    </PIN>
-   <PIN pinname="Y Input Value" slicecount="1" values="3">
+   <PIN pinname="Y Input Value" slicecount="1" values="1">
    </PIN>
    <PIN pinname="Descriptive Name" slicecount="1" values="gain">
    </PIN>
@@ -341,5 +339,7 @@
    <LINK srcnodeid="85" srcpinname="Output" dstnodeid="66" dstpinname="Y Input Value">
    </LINK>
    <LINK srcnodeid="64" srcpinname="EnergyOut" dstnodeid="85" dstpinname="Input 1">
+   </LINK>
+   <LINK srcnodeid="16" srcpinname="FFT" dstnodeid="67" dstpinname="Y Input Value">
    </LINK>
    </PATCH>
