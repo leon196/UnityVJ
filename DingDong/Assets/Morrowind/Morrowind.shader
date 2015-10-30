@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Morrowind"
+﻿Shader "Morrowind/Morrowind"
 {
 	Properties
 	{

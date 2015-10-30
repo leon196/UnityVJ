@@ -8,18 +8,33 @@ ModelImporter:
     100000: //RootNode
     100002: Morrowind_MeshPart0
     100004: Morrowind_MeshPart1
+    100006: DrawCall_523.001_MeshPart0
+    100008: DrawCall_523.001_MeshPart1
+    100010: DrawCall_523.001_MeshPart2
     400000: //RootNode
     400002: Morrowind_MeshPart0
     400004: Morrowind_MeshPart1
+    400006: DrawCall_523.001_MeshPart0
+    400008: DrawCall_523.001_MeshPart1
+    400010: DrawCall_523.001_MeshPart2
     2300000: Morrowind_MeshPart0
     2300002: Morrowind_MeshPart1
     2300004: //RootNode
+    2300006: DrawCall_523.001_MeshPart0
+    2300008: DrawCall_523.001_MeshPart1
+    2300010: DrawCall_523.001_MeshPart2
     3300000: Morrowind_MeshPart0
     3300002: Morrowind_MeshPart1
     3300004: //RootNode
+    3300006: DrawCall_523.001_MeshPart0
+    3300008: DrawCall_523.001_MeshPart1
+    3300010: DrawCall_523.001_MeshPart2
     4300000: Morrowind_MeshPart0
     4300002: Morrowind_MeshPart1
     4300004: Morrowind
+    4300006: DrawCall_523.001_MeshPart0
+    4300008: DrawCall_523.001_MeshPart1
+    4300010: DrawCall_523.001_MeshPart2
   materials:
     importMaterials: 1
     materialName: 0
