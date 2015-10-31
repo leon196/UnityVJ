@@ -132,7 +132,7 @@ Shader "Morrowind/Morrowind5" {
           c = rotateY(c, fft * 5.0);*/
           /*a += triNormal * fft;// * 0.75;
           b += triNormal * fft;// * 1.0;*/
-          c += triNormal * fft * lum * 0.5;
+          c += triNormal * fft * 0.5;
           /*c += normalize(g) * fft;// * lum;*/
           /*a = a + rotateY(tri[0].normal, n + t);// + rotateX(tri[0].normal, n);
           b = b + rotateY(tri[1].normal, n + t);// + rotateX(tri[1].normal, n);
@@ -149,11 +149,13 @@ Shader "Morrowind/Morrowind5" {
 
           triNormal = getTriangleNormal(a, b, c);
 
+          UNITY_TRANSFER_DEPTH(o.depth);
+
           FS_INPUT pIn = (FS_INPUT)0;
           pIn.pos = mul(vp, float4(a, 1.0));
           pIn.uv = tri[0].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(1.0,0.0,0.0,1.0);
+          pIn.color = half4(0.0,0.0,0.0,1.0);
           triStream.Append(pIn);
 
           pIn.pos =  mul(vp, float4(b, 1.0));
@@ -165,7 +167,7 @@ Shader "Morrowind/Morrowind5" {
           pIn.pos =  mul(vp, float4(c, 1.0));
           pIn.uv = tri[2].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(0.0,0.0,1.0,1.0);
+          pIn.color = half4(fft,0.0,1.0,1.0);
           triStream.Append(pIn);
         }
 
@@ -173,6 +175,7 @@ Shader "Morrowind/Morrowind5" {
         {
           half4 color = tex2D(_MainTex, i.uv);
           /*color.rgb = i.normal * 0.5 + 0.5;*/
+          /*color.a *= 1.0 - i.color.r;*/
           return color;
         }
         ENDCG

@@ -6,9 +6,7 @@ Shader "DingDong/Simple" {
 		SubShader {
 			Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
 			Pass {
-				Cull off
 				Blend SrcAlpha OneMinusSrcAlpha
-				ZWrite Off
 				LOD 200
 
 				CGPROGRAM
@@ -36,7 +34,7 @@ Shader "DingDong/Simple" {
 
 				half4 frag (v2f i) : COLOR
 				{
-					return tex2D(_MainTex, i.uv);
+					return tex2D(_MainTex, i.uv) * _Color;
 				}
 				ENDCG
 			}
