@@ -1,4 +1,4 @@
-Shader "Morrowind/Morrowind6" {
+Shader "Morrowind/MorroSphere" {
   Properties {
     _Color ("Color", Color) = (1,1,1,1)
     _MainTex ("Texture (RGB)", 2D) = "white" {}
@@ -133,9 +133,9 @@ Shader "Morrowind/Morrowind6" {
           /*v.vertex.xyz = pos + rotateY(v.normal, n + t) + rotateX(v.normal, n);*/
 
           float scale = 0.05;
-          a += normalize(a - g) * fft * scale;
+          /*a += normalize(a - g) * fft * scale;
           b += normalize(b - g) * fft * scale;
-          c += normalize(c - g) * fft * scale;
+          c += normalize(c - g) * fft * scale;*/
           /*triNormal = rotateY(triNormal, t);
           triNormal = rotateX(triNormal, t);*/
 
@@ -144,7 +144,7 @@ Shader "Morrowind/Morrowind6" {
           c = rotateY(c, fft * 5.0);*/
           /*a += triNormal * fft;// * 0.75;
           b += triNormal * fft;// * 1.0;*/
-          g += triNormal * fft * lum * 0.5;
+          a += tri[0].normal * 0.1;
           /*a += triNormal * fft * lum * 0.5;
           b += triNormal * fft * lum * 0.5;
           c += triNormal * fft * lum * 0.5;*/

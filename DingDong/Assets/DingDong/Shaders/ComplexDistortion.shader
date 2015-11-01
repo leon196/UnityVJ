@@ -42,12 +42,12 @@ Shader "Hidden/ComplexDistortion" {
         uv.y += _Time * 10.0;*/
         /*uv.x = fmod(abs(uv.x), 1.0);
         uv.y = fmod(abs(uv.y), 1.0);*/
-        /*float t = _Time * 10.0;*/
+        float t = _Time * 10.0;
         /*float t = _GlobalFFTTotal * 0.001;*/
-        /*uv.x += t * lerp(-1.0, 1.0, fmod(floor(abs(uv.x)), 2.0));*/
+        uv.x += t * lerp(-1.0, 1.0, fmod(floor(abs(uv.x)), 2.0));
         float xMod = fmod(abs(uv.x), 1.0);
         uv.x = lerp(1.0 - xMod, xMod, fmod(floor(abs(uv.x)), 2.0));
-        /*uv.y += t * lerp(-1.0, 1.0, fmod(floor(abs(uv.y)), 2.0));*/
+        uv.y += t * lerp(-1.0, 1.0, fmod(floor(abs(uv.y)), 2.0));
         float yMod = fmod(abs(uv.y), 1.0);
         uv.y = lerp(1.0 - yMod, yMod, fmod(floor(abs(uv.y)), 2.0));
 

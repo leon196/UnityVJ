@@ -29,6 +29,7 @@ Shader "Morrowind/Morrowind7" {
 					float2 uv	: TEXCOORD0;
           float4 screenUV : TEXCOORD1;
           float3 viewDir : TEXCOORD2;
+          half4 color : COLOR;
 				};
 
         struct FS_INPUT {
@@ -88,6 +89,7 @@ Shader "Morrowind/Morrowind7" {
           o.pos =  mul(_Object2World, v.vertex);
           o.normal = v.normal;
           o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
+          o.color = v.color;
           o.screenUV = ComputeScreenPos(o.pos);
           return o;
         }
@@ -112,6 +114,7 @@ Shader "Morrowind/Morrowind7" {
           /*float x = 1.0 - abs(fmod(abs(g.y), 1.0) * 2.0 - 1.0);*/
           /*float x = ((triNormal.x + triNormal.y + triNormal.z) / 3.0) * 0.5 + 0.5;*/
           float x = (atan2(triNormal.y, triNormal.x) * 0.5 / PI + 0.5 + atan2(triNormal.z, triNormal.x) * 0.5 / PI + 0.5 ) / 2.0;
+          /*float x = clamp(g.y / 2.0, 0.0, 1.0);*/
           /*float x = atan2(triNormal.y, triNormal.x) / PI;
           x = x * 0.5 + 0.5;*/
 
@@ -140,9 +143,9 @@ Shader "Morrowind/Morrowind7" {
 
           // Scale
           float scale = 0.02;
-          a += normalize(a - g) * fft * scale;
+          /*a += normalize(a - g) * fft * scale;
           b += normalize(b - g) * fft * scale;
-          c += normalize(c - g) * fft * scale;
+          c += normalize(c - g) * fft * scale;*/
 
           float3 aa = lerp(a, g, 0.5);
           float3 bb = lerp(b, g, 0.5);
@@ -153,14 +156,21 @@ Shader "Morrowind/Morrowind7" {
           /*a = rotateY(a, fft * 10.0);
           b = rotateY(b, fft * 2.0);
           c = rotateY(c, fft * 5.0);*/
-          float scaleFFT = 0.5;
-          a += triNormal * fft * scaleFFT * lum;// * 0.75;
-          b += triNormal * fft * scaleFFT * lum;// * 1.0;
-          c += triNormal * fft * scaleFFT * lum;// * 1.0;
-          float3 center = (a + b + c) / 3.0;
+          float scaleFFT = 0.3;
+          /*triNormal = rotateY(triNormal, fft * 40.0);*/
+          /*float3 gravity = float3(0.0, -2.0, -2.0);*/
+          float3 gravity = normalize(a);
+          /*gravity = rotateY(gravity, fft * 4.0);
+          gravity = rotateX(gravity, fft * 4.0);*/
+          /*a += normalize(gravity + triNormal * 2.0 + frac(a * 10.0)) * scaleFFT * (0.5 + fft);// * 0.75;*/
+          a += gravity * scaleFFT * (0.5 + fft * 5.0);// * 0.75;
+          /*a += normalize(gravity + triNormal * 2.0 + frac(a * 10.0)) * scaleFFT * (0.5 + fft);// * 0.75;*/
+          /*b += triNormal * fft * scaleFFT * lum;// * 1.0;
+          c += triNormal * fft * scaleFFT * lum;// * 1.0;*/
+          /*float3 center = (a + b + c) / 3.0;
           float lineSize = 0.001;
           float3 g1 = center + normalize(a - center) * lineSize;
-          float3 g2 = center + normalize(c - center) * lineSize;
+          float3 g2 = center + normalize(c - center) * lineSize;*/
           /*c += triNormal * fft * lum * 0.5;*/
           /*c += normalize(g) * fft;// * lum;*/
           /*a = a + rotateY(tri[0].normal, n + t);// + rotateX(tri[0].normal, n);
@@ -184,46 +194,46 @@ Shader "Morrowind/Morrowind7" {
           pIn.pos = mul(vp, float4(a, 1.0));
           pIn.uv = tri[0].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(0.0,0.0,0.0,1.0);
+          pIn.color = tri[0].color;//half4(0.0,0.0,0.0,1.0);
           pIn.viewDir = normalize(WorldSpaceViewDir(float4(a, 1.0)));
           triStream.Append(pIn);
 
           pIn.pos =  mul(vp, float4(b, 1.0));
           pIn.uv = tri[1].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(0.0,1.0,0.0,0.0);
+          pIn.color = tri[1].color;//half4(0.0,1.0,0.0,0.0);
           pIn.viewDir = normalize(WorldSpaceViewDir(float4(b, 1.0)));
           triStream.Append(pIn);
 
           pIn.pos =  mul(vp, float4(c, 1.0));
           pIn.uv = tri[2].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(fft,0.0,1.0,1.0);
+          pIn.color = tri[2].color;//half4(fft,0.0,1.0,1.0);
           pIn.viewDir = normalize(WorldSpaceViewDir(float4(c, 1.0)));
           triStream.Append(pIn);
 
-          triStream.RestartStrip();
+          /*triStream.RestartStrip();
 
           pIn.pos = mul(vp, float4(g, 1.0));
           pIn.uv = tri[0].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(0.0,0.0,0.0,1.0);
+          pIn.color = tri[0].color;//half4(0.0,0.0,0.0,1.0);
           pIn.viewDir = normalize(WorldSpaceViewDir(float4(g, 1.0)));
           triStream.Append(pIn);
 
           pIn.pos =  mul(vp, float4(g1, 1.0));
           pIn.uv = tri[1].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(0.0,1.0,0.0,0.0);
+          pIn.color = tri[1].color;//half4(0.0,1.0,0.0,0.0);
           pIn.viewDir = normalize(WorldSpaceViewDir(float4(g1, 1.0)));
           triStream.Append(pIn);
 
           pIn.pos =  mul(vp, float4(g2, 1.0));
           pIn.uv = tri[2].uv;
           pIn.normal = triNormal;
-          pIn.color = half4(fft,0.0,1.0,1.0);
+          pIn.color = tri[2].color;//half4(fft,0.0,1.0,1.0);
           pIn.viewDir = normalize(WorldSpaceViewDir(float4(g2, 1.0)));
-          triStream.Append(pIn);
+          triStream.Append(pIn);*/
         }
 
         half4 frag (FS_INPUT i) : COLOR
@@ -231,6 +241,7 @@ Shader "Morrowind/Morrowind7" {
           half4 color = tex2D(_MainTex, i.uv);
           /*color.rgb = i.normal * 0.5 + 0.5;*/
           /*color.a *= 1.0 - i.color.r;*/
+          color.rgb = i.color;
           return color;
         }
         ENDCG
