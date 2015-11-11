@@ -2,6 +2,7 @@ Shader "DingDong/Basic/FFT" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Texture (RGB)", 2D) = "white" {}
+		_Thinckness ("Thinckness", Float) = 0.01
 		}
 		SubShader {
 			Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
@@ -19,28 +20,30 @@ Shader "DingDong/Basic/FFT" {
 				struct v2f {
 					float4 pos : SV_POSITION;
 					float2 uv : TEXCOORD0;
+					float4 screenUV : TEXCOORD1;
 				};
 
 				sampler2D _MainTex;
 				sampler2D _TextureFFT;
 				float4 _MainTex_ST;
 				fixed4 _Color;
+				float _Thinckness;
 
 				v2f vert (appdata_full v)
 				{
 					v2f o;
 					o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 					o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
+					o.screenUV = ComputeScreenPos(o.pos);
 					return o;
 				}
 
 				half4 frag (v2f i) : COLOR
 				{
-					half4 tex = tex2D(_TextureFFT, i.uv);
-					half4 red = half4(1, 0, 0, 1);
-					float lin = i.uv.y - tex.r;
-					//half4 color = lerp(tex, red, 0.01 / abs(lin));
-					half4 color = red * 0.01 / abs(lin);
+					float2 uv = i.screenUV.xy / i.screenUV.w;
+					half4 tex = tex2D(_TextureFFT, uv);
+					float lin = uv.y - tex.r;
+					half4 color = _Color * _Thinckness / abs(lin);
 					return color;
 				}
 
