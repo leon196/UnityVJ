@@ -1,4 +1,4 @@
-Shader "DingDong/FFT" {
+Shader "DingDong/Basic/FFT" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Texture (RGB)", 2D) = "white" {}
@@ -32,13 +32,18 @@ Shader "DingDong/FFT" {
 					o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 					o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
 					return o;
-
 				}
 
 				half4 frag (v2f i) : COLOR
 				{
-					return tex2D(_TextureFFT, i.uv);
+					half4 tex = tex2D(_TextureFFT, i.uv);
+					half4 red = half4(1, 0, 0, 1);
+					float lin = i.uv.y - tex.r;
+					//half4 color = lerp(tex, red, 0.01 / abs(lin));
+					half4 color = red * 0.01 / abs(lin);
+					return color;
 				}
+
 				ENDCG
 			}
 		}

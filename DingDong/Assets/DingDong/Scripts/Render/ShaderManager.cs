@@ -5,6 +5,7 @@ namespace DingDong
 {
 	public class Shader : Cycle
 	{
+		/*
 		public Material materialEffect;
 
 		void Start ()
@@ -64,6 +65,6 @@ namespace DingDong
 			UnityEngine.Shader.SetGlobalFloat("_RoundEffect", round);
 			UnityEngine.Shader.SetGlobalFloat("_RatioBufferTreshold", 0.4f + 0.2f * Random.Range(0f, 1f));
 			UnityEngine.Shader.SetGlobalFloat("_RatioRandom1", Random.Range(0f, 1f));
-		}
+		}*/
 	}
 }

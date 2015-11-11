@@ -5,6 +5,7 @@ namespace DingDong
 {
 	public class DingDong : MonoBehaviour
 	{
+		/*
 		public bool cycleMode = false;
 
 		Shader shader;
@@ -68,6 +69,6 @@ namespace DingDong
 			{
 				Application.Quit();
 			}
-		}
+		}*/
 	}
 }

@@ -102,7 +102,7 @@ using System;
         }
         catch (Exception e)
         {
-            //Debug.Log("ThreadAbortException"+e);
+            Debug.Log("ThreadAbortException"+e);
         }
         finally
         {
