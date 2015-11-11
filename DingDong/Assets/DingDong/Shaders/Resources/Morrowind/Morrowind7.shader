@@ -241,7 +241,7 @@ Shader "Morrowind/Morrowind7" {
           half4 color = tex2D(_MainTex, i.uv);
           /*color.rgb = i.normal * 0.5 + 0.5;*/
           /*color.a *= 1.0 - i.color.r;*/
-          color.rgb = i.color;
+          /*color.rgb = i.color;*/
           return color;
         }
         ENDCG
