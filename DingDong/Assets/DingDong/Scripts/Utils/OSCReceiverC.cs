@@ -24,7 +24,7 @@ public class OSCReceiverC : MonoBehaviour
   void Awake ()
   {
     texture2D = new Texture2D(OSCcount, 1);
-    //texture2D.filterMode = FilterMode.Point;
+    texture2D.filterMode = FilterMode.Point;
     colors = new Color[OSCcount];
     for (int i = 0; i < OSCcount; i++) {
       colors[i] = new Color(1f, 1f, 1f, 1f);
@@ -60,6 +60,7 @@ public class OSCReceiverC : MonoBehaviour
       colors[i] = new Color(fft, fft, fft, fft);
       fftGlobal += fft;
     }
+    fftGlobal /= (float)OSCcount;
     fftTotal += fftGlobal;
     Shader.SetGlobalFloat("_GlobalFFT", fftGlobal);
     Shader.SetGlobalFloat("_GlobalFFTTotal", fftTotal);

@@ -37,6 +37,8 @@ Shader "DingDong/Vertex/Tornado" {
     };
 
     sampler2D _MainTex;
+    sampler2D _TextureFFT;
+    float _GlobalFFT;
     float4 _MainTex_ST;
     fixed4 _Color;
     float _Size;
@@ -103,7 +105,7 @@ Shader "DingDong/Vertex/Tornado" {
 
       float3 center = (a + b + c) / 3.0;
 
-      // float t = cos(_Time * 30.0) * 0.5 + 0.5;
+      float t = cos(_Time * 30.0) * 0.25 + 0.5;
 
       // a = normalize(a) * pow(length(a), 2.0);
       // b = normalize(b) * pow(length(b), 2.0);
@@ -112,9 +114,9 @@ Shader "DingDong/Vertex/Tornado" {
       // b = normalize(b) * (log(length(b)) + 2.0) * 4.0;
       // c = normalize(c) * (log(length(c)) + 2.0) * 4.0;
       // Scale
-      // a += normalize(a - g) * t;
-      // b += normalize(b - g) * t;
-      // c += normalize(c - g) * t;
+      a += normalize(a - center) * _GlobalFFT;
+      b += normalize(b - center) * _GlobalFFT;
+      c += normalize(c - center) * _GlobalFFT;
 
       // float tt = _Time * 30.0;
       // float radius = 10.0;
@@ -122,6 +124,17 @@ Shader "DingDong/Vertex/Tornado" {
       // float dist = distance(target, g) / 10.0;
       // dist = pow(dist, 2.0) / 100.0;
       float angle = pow(length(center), 2.0);
+
+      // float t = _Time * 20.0;
+      // float tt = cos(_Time * 30.0) * 0.5 + 0.5;
+      float x = 1.0 - abs(fmod(abs(angle), 1.0) * 2.0 - 1.0);
+      // float x = 1.0 - abs(fmod(abs(g.y), 1.0) * 2.0 - 1.0);
+      // float x = ((triNormal.x + triNormal.y + triNormal.z) / 3.0) * 0.5 + 0.5;
+      // float x = (atan2(triNormal.y, triNormal.x) * 0.5 / PI + 0.5 + atan2(triNormal.z, triNormal.x) * 0.5 / PI + 0.5 ) / 2.0;
+      // float x = clamp(g.y / 2.0, 0.0, 1.0);
+      // float x = (atan2(triNormal.y, triNormal.x) / PI) * 0.5 + 0.5;
+      // float x = 1.0 - dot(normalize(WorldSpaceViewDir(float4(g, 1.0))), triNormal) * 0.5 + 0.5;
+      float fft = tex2Dlod(_TextureFFT, float4(x, 0, 0, 0)).r;
 
       a += rotateY(tri[0].pos, angle);
       b += rotateY(tri[1].pos, angle);
