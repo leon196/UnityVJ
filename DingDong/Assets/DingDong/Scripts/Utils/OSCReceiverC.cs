@@ -18,19 +18,23 @@ public class OSCReceiverC : MonoBehaviour
   public static float[]               OSCvalues       = new float[OSCcount];
 
   Texture2D texture2D;
+  Texture2D texture2DPoint;
   Color[] colors;
   float fftTotal;
 
   void Awake ()
   {
     texture2D = new Texture2D(OSCcount, 1);
-    texture2D.filterMode = FilterMode.Point;
+    texture2DPoint = new Texture2D(OSCcount, 1);
+    texture2DPoint.filterMode = FilterMode.Point;
     colors = new Color[OSCcount];
     for (int i = 0; i < OSCcount; i++) {
       colors[i] = new Color(1f, 1f, 1f, 1f);
     }
     texture2D.SetPixels(colors);
+    texture2DPoint.SetPixels(colors);
     Shader.SetGlobalTexture("_TextureFFT", texture2D);
+    Shader.SetGlobalTexture("_TextureFFTPoint", texture2DPoint);
     fftTotal = 0f;
   }
 
@@ -57,6 +61,7 @@ public class OSCReceiverC : MonoBehaviour
     float fftGlobal = 0f;
     for (int i = 0; i < OSCcount; i++) {
       fft = OSCvalues[i];
+      fft = Mathf.Clamp(fft, 0f, 1f);
       colors[i] = new Color(fft, fft, fft, fft);
       fftGlobal += fft;
     }
@@ -66,5 +71,7 @@ public class OSCReceiverC : MonoBehaviour
     Shader.SetGlobalFloat("_GlobalFFTTotal", fftTotal);
     texture2D.SetPixels(colors);
     texture2D.Apply(false);
+    texture2DPoint.SetPixels(colors);
+    texture2DPoint.Apply(false);
   }
 }

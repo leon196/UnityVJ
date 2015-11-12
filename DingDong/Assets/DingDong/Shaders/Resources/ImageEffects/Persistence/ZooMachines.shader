@@ -17,8 +17,7 @@ Shader "Hidden/ZooMachines"
 			
 			#include "UnityCG.cginc"
 			#include "../../Utils/ClassicNoise2D.cginc"
-			#define PI 3.141592653589
-			#define PI2 6.283185307179
+			#include "../../Utils/Utils.cginc"
 
 			struct appdata
 			{
@@ -38,22 +37,6 @@ Shader "Hidden/ZooMachines"
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.uv;
 				return o;
-			}
-
-			float2 pixelate (float2 p, float detail)
-			{
-				return floor(p * detail) / detail;
-			}
-
-			float luminance (float3 c)
-			{
-				return (c.r + c.g + c.b) / 3.0;
-			}
-
-			// http://stackoverflow.com/questions/12964279/whats-the-origin-of-this-glsl-rand-one-liner
-			float rand(float2 co)
-			{
-			  return frac(sin(dot(co.xy ,float2(12.9898,78.233))) * 43758.5453);
 			}
 			
 			sampler2D _MainTex;

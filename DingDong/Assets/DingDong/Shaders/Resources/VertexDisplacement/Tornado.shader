@@ -19,6 +19,7 @@ Shader "DingDong/Vertex/Tornado" {
       #pragma fragment frag
       #include "UnityCG.cginc"
       #include "../Utils/Noise3D.cginc"
+      #include "../Utils/Utils.cginc"
 
       struct GS_INPUT
       {
@@ -45,44 +46,9 @@ Shader "DingDong/Vertex/Tornado" {
     float _Scale;
     float _Offset;
 
-    float3 rotateY(float3 v, float t)
-    {
-      float cost = cos(t); float sint = sin(t);
-      return float3(v.x * cost + v.z * sint, v.y, -v.x * sint + v.z * cost);
-    }
-    float3 rotateX(float3 v, float t)
-    {
-      float cost = cos(t); float sint = sin(t);
-      return float3(v.x, v.y * cost - v.z * sint, v.y * sint + v.z * cost);
-    }
-
-    float3 getNormal(GS_INPUT tri[3])
-    {
-      float3 u = tri[1].pos - tri[0].pos;
-      float3 v = tri[2].pos - tri[0].pos;
-      float3 normal = float3(1.0, 0.0, 0.0);
-      normal.x = u.y * v.z - u.z * v.y;
-      normal.y = u.z * v.x - u.x * v.z;
-      normal.z = u.x * v.y - u.y * v.x;
-      return normalize(normal);
-    }
-
     GS_INPUT vert (appdata_full v)
     {
       GS_INPUT o = (GS_INPUT)0;
-
-      // v.vertex.y += sin(_Time * 10.0) * 20.0;
-      // v.vertex.y += lerp(0.0, 2.0, sin(_Time * 20.0) * 0.5 + 0.5);
-
-      // float tt = _Time * 24.0;
-      // float radius = 2.0;
-      // float3 target = float3(cos(tt) * radius, 0.0, sin(tt) * radius);
-      // float dist = distance(target, v.vertex.xyz);
-      // dist = pow(dist, 2.0) / 10.0;
-      // float angle = dist;
-
-      // v.vertex.xyz = rotateY(v.vertex.xyz, angle);
-
       o.pos =  mul(_Object2World, v.vertex);
       o.normal = v.normal;
       o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
@@ -93,56 +59,34 @@ Shader "DingDong/Vertex/Tornado" {
     [maxvertexcount(3)]
     void geom(triangle GS_INPUT tri[3], inout TriangleStream<FS_INPUT> triStream)
     {
-      // float4x4 vp = mul(UNITY_MATRIX_MVP, _World2Object);
-
       float3 a = mul(_World2Object, tri[0].pos).xyz;
       float3 b = mul(_World2Object, tri[1].pos).xyz;
       float3 c = mul(_World2Object, tri[2].pos).xyz;
+      float3 center = (a + b + c) / 3.0;
+      // float3 viewDir = normalize(WorldSpaceViewDir(float4(g, 1.0)));
 
       float2 uvA = tri[0].uv;
       float2 uvB = tri[1].uv;
       float2 uvC = tri[2].uv;
 
-      float3 center = (a + b + c) / 3.0;
-
-      float t = cos(_Time * 30.0) * 0.25 + 0.5;
-
-      // a = normalize(a) * pow(length(a), 2.0);
-      // b = normalize(b) * pow(length(b), 2.0);
-      // c = normalize(c) * pow(length(c), 2.0);
-      // a = normalize(a) * (log(length(a)) + 2.0) * 4.0;
-      // b = normalize(b) * (log(length(b)) + 2.0) * 4.0;
-      // c = normalize(c) * (log(length(c)) + 2.0) * 4.0;
       // Scale
       a += normalize(a - center) * _GlobalFFT;
       b += normalize(b - center) * _GlobalFFT;
       c += normalize(c - center) * _GlobalFFT;
 
-      // float tt = _Time * 30.0;
-      // float radius = 10.0;
-      // float3 target = float3(10.0 + cos(tt) * radius, 0.0, 10.0 + sin(tt) * radius);
-      // float dist = distance(target, g) / 10.0;
-      // dist = pow(dist, 2.0) / 100.0;
       float angle = pow(length(center), 2.0);
-
-      // float t = _Time * 20.0;
-      // float tt = cos(_Time * 30.0) * 0.5 + 0.5;
-      float x = 1.0 - abs(fmod(abs(angle), 1.0) * 2.0 - 1.0);
-      // float x = 1.0 - abs(fmod(abs(g.y), 1.0) * 2.0 - 1.0);
-      // float x = ((triNormal.x + triNormal.y + triNormal.z) / 3.0) * 0.5 + 0.5;
-      // float x = (atan2(triNormal.y, triNormal.x) * 0.5 / PI + 0.5 + atan2(triNormal.z, triNormal.x) * 0.5 / PI + 0.5 ) / 2.0;
-      // float x = clamp(g.y / 2.0, 0.0, 1.0);
-      // float x = (atan2(triNormal.y, triNormal.x) / PI) * 0.5 + 0.5;
-      // float x = 1.0 - dot(normalize(WorldSpaceViewDir(float4(g, 1.0))), triNormal) * 0.5 + 0.5;
+      float x = dentDeScie(angle);
+      // float x = vectorToNumber1(triNormal);
+      // float x = vectorToNumber2(triNormal);
+      // float x = vectorToNumber3(triNormal, viewDir);
       float fft = tex2Dlod(_TextureFFT, float4(x, 0, 0, 0)).r;
 
-      a += rotateY(tri[0].pos, angle);
-      b += rotateY(tri[1].pos, angle);
-      c += rotateY(tri[2].pos, angle);
+      a += rotateY(tri[0].pos, angle * fft);
+      b += rotateY(tri[1].pos, angle * fft);
+      c += rotateY(tri[2].pos, angle * fft);
 
-      float3 triNormal = getNormal(tri);
-      // float3 triNormal = cross(normalize(c - a), normalize(b - a));
-      // float3 triNormal = normalize(rotateY(tri[0].normal, angle));
+
+      float3 triNormal = getNormal(a, b, c);
 
       FS_INPUT pIn = (FS_INPUT)0;
       pIn.pos = mul(UNITY_MATRIX_MVP, float4(a, 1.0));
