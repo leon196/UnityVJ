@@ -185,7 +185,7 @@ float hash( float n )
     return frac(sin(n)*43758.5453);
 }
 
-float noise( float3 x )
+float noiseIQ( float3 x )
 {
     // The noise function returns a value in the range -1.0f -> 1.0f
     float3 p = floor(x);
