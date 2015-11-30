@@ -75,7 +75,8 @@ Shader "DingDong/Vertex/Tornado" {
       float2 uvCenter = (uvA + uvB + uvC) / 3.0;
 
       // float dist = snoise(center * 10.0) * 0.5 + 0.5;
-      float dist = pow(length(center), 2.0);
+      float dist = pow(center.y, 2.0);
+      // float dist = pow(length(center), 2.0);
       // float dist = sqrt(center);
       // a = normalize(a) * dist;
       // b = normalize(b) * dist;
@@ -95,13 +96,13 @@ Shader "DingDong/Vertex/Tornado" {
       float3 cB = b - center;
       float3 cC = c - center;
 
-      a = rotateX(rotateY(a, angle), angle);
-      b = rotateX(rotateY(b, angle), angle);
-      c = rotateX(rotateY(c, angle), angle);
+      a = rotateY(a, angle);//rotateX(rotateY(a, angle), angle);
+      b = rotateY(b, angle);//rotateX(rotateY(b, angle), angle);
+      c = rotateY(c, angle);//rotateX(rotateY(c, angle), angle);
 
-      a = a + rotateX(rotateY(cA, t), t2);
-      b = b + rotateX(rotateY(cB, t), t2);
-      c = c + rotateX(rotateY(cC, t), t2);
+      a = a + rotateX(rotateY(cA, t + angle), t2 + angle);
+      b = b + rotateX(rotateY(cB, t + angle), t2 + angle);
+      c = c + rotateX(rotateY(cC, t + angle), t2 + angle);
 
 
       float3 triNormal = getNormal(a, b, c);

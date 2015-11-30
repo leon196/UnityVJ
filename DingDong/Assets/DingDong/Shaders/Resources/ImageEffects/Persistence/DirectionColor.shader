@@ -3,6 +3,7 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_PersistenceTreshold ("Persistence Treshold", Range(0, 1)) = 0.5
 	}
 	SubShader
 	{
@@ -45,6 +46,7 @@
 			sampler2D _TextureFFTPoint;
 			float _GlobalFFT;
 			float _GlobalFFTTotal;
+			float _PersistenceTreshold;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
@@ -63,7 +65,7 @@
 
 				dist = pow(0.1 + dist * 6.0, 2.0) ;
 
-				float fftAcceleration = _GlobalFFT;//clamp((fft + _GlobalFFT) * 0.5, 0.0, 1.0);//(0.1 + pow(fft, 2.0) * 0.5 + pow(_GlobalFFT, 2.0));
+				float fftAcceleration = 0.5 + _GlobalFFT * 0.5;//clamp((fft + _GlobalFFT) * 0.5, 0.0, 1.0);//(0.1 + pow(fft, 2.0) * 0.5 + pow(_GlobalFFT, 2.0));
 
 				float2 offset = float2(cos(angle) * dist, sin(angle) * dist) * 0.008 * fftAcceleration;
 				angle = rand(uv) * PI2;
@@ -77,8 +79,8 @@
 
 				renderTarget *= 0.99 + fftAcceleration * 0.04;
 				// float treshold = 0.2 + fftAcceleration * 0.8;
-				float treshold = easeOutQuint(_GlobalFFT, 0.0, 1.0, 1.0);
-				half4 color = lerp(renderTarget, video, step(treshold, distance(video.rgb, renderTarget.rgb)));
+				// float treshold = easeOutQuint(_GlobalFFT, 0.0, 1.0, 1.0);
+				half4 color = lerp(renderTarget, video, step(_PersistenceTreshold, distance(video.rgb, renderTarget.rgb)));
     			// color = lerp(color, video, clamp(luminance(filter(_MainTex, uv, _ScreenParams.xy)), 0.0, 1.0));
 				//distance(video.rgb, renderTarget.rgb)
 				//Luminance(abs(video - renderTarget))
