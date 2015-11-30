@@ -4,10 +4,14 @@ using System.Collections;
 public class OhoBox : MonoBehaviour
 {
 	Arduino arduino;
+	Zapping zapping;
+	SwitchCamera switchCamera;
 
 	void Start ()
 	{
 		arduino = new Arduino();
+		zapping = GetComponent<Zapping>();
+		switchCamera = GetComponent<SwitchCamera>();
 	}
 
 	void Update ()
@@ -20,6 +24,13 @@ public class OhoBox : MonoBehaviour
 			Shader.SetGlobalFloat("_OhoSpiner1", arduino.Spiner(1));
 			Shader.SetGlobalFloat("_OhoSpiner2", arduino.Spiner(2));
 			Shader.SetGlobalFloat("_OhoSpiner3", arduino.Spiner(3));
+
+			if (zapping && arduino.ButtonPressed(1)) {
+				zapping.Zap();
+			}
+			if (switchCamera && arduino.ButtonPressed(3)) {
+				switchCamera.Switch();
+			}
 		}
 	}
 }

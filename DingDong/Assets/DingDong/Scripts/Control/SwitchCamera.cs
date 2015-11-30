@@ -29,7 +29,7 @@ public class SwitchCamera : MonoBehaviour
 		}
 	}
 
-	void Switch ()
+	public void Switch ()
 	{
 		bufferTexture.cameraBuffer.targetTexture = bufferPlaceHolder;
 		bufferTexture.cameraBuffer = cameraList[currentCamera];

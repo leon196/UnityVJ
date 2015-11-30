@@ -19,6 +19,7 @@ Shader "DingDong/Vertex/Tornado" {
       #pragma fragment frag
       #include "UnityCG.cginc"
       #include "../Utils/Noise3D.cginc"
+      #include "../Utils/Complex.cginc"
       #include "../Utils/Utils.cginc"
 
       struct GS_INPUT
@@ -28,15 +29,17 @@ Shader "DingDong/Vertex/Tornado" {
        float2 uv	: TEXCOORD0;
        float4 screenUV : TEXCOORD1;
        float3 viewDir : TEXCOORD2;
+      float value : TEXCOORD3;
      };
 
      struct FS_INPUT {
       float4 pos : SV_POSITION;
-      float2 uv : TEXCOORD0;
-      float4 screenUV : TEXCOORD1;
       half4 color : COLOR;
       float3 normal : NORMAL;
+      float2 uv : TEXCOORD0;
+      float4 screenUV : TEXCOORD1;
       float3 viewDir : TEXCOORD2;
+      float value : TEXCOORD3;
     };
 
     sampler2D _MainTex;
@@ -72,12 +75,15 @@ Shader "DingDong/Vertex/Tornado" {
       float2 uvCenter = (uvA + uvB + uvC) / 3.0;
 
       // float dist = snoise(center * 10.0) * 0.5 + 0.5;
-      float dist = pow(center, 2.0);
+      float dist = pow(length(center), 2.0);
+      // float dist = sqrt(center);
       // a = normalize(a) * dist;
       // b = normalize(b) * dist;
       // c = normalize(c) * dist;
 
-      float angle = pow(dist, 2.0);
+      float t = _Time * 10.0;
+      float t2 = t * 10.0;
+      float angle = pow(dist, 2.0) + t;
 
       // Scale
       // center = (a + b + c) / 3.0;
@@ -85,9 +91,17 @@ Shader "DingDong/Vertex/Tornado" {
       // b += normalize(b - center) * 0.1;
       // c += normalize(c - center) * 0.1;
 
-      a = rotateY(a, angle);
-      b = rotateY(b, angle);
-      c = rotateY(c, angle);
+      float3 cA = a - center;
+      float3 cB = b - center;
+      float3 cC = c - center;
+
+      a = rotateX(rotateY(a, angle), angle);
+      b = rotateX(rotateY(b, angle), angle);
+      c = rotateX(rotateY(c, angle), angle);
+
+      a = a + rotateX(rotateY(cA, t), t2);
+      b = b + rotateX(rotateY(cB, t), t2);
+      c = c + rotateX(rotateY(cC, t), t2);
 
 
       float3 triNormal = getNormal(a, b, c);
@@ -97,25 +111,28 @@ Shader "DingDong/Vertex/Tornado" {
       pIn.uv = tri[0].uv;
       pIn.normal = triNormal;
       pIn.color = half4(1.0,1.0,1.0,1.0);
+      pIn.value = dist;
       triStream.Append(pIn);
 
       pIn.pos =  mul(UNITY_MATRIX_MVP, float4(b, 1.0));
       pIn.uv = tri[1].uv;
       pIn.normal = triNormal;
       pIn.color = half4(1.0,1.0,1.0,1.0);
+      pIn.value = dist;
       triStream.Append(pIn);
 
       pIn.pos =  mul(UNITY_MATRIX_MVP, float4(c, 1.0));
       pIn.uv = tri[2].uv;
       pIn.normal = triNormal;
       pIn.color = half4(1.0,1.0,1.0,1.0);
+      pIn.value = dist;
       triStream.Append(pIn);
     }
 
     half4 frag (FS_INPUT i) : COLOR
     {
       half4 color = _Color;
-      color.rgb = i.normal * 0.5 + 0.5;
+      color.rgb = rotateX(i.normal, i.value) * 0.5 + 0.5;
       // color.rgb = float3(1.0, 1.0, 1.0) * dot(i.normal, normalize(i.viewDir));
       color.a = 1.0;
       return color;

@@ -1,13 +1,23 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Zapping : MonoBehaviour 
 {
-	Filter[] filterList;
+	// Filter[] filterList;
+	List<Filter[]> filterList;
+	Camera[] cameraList;
 
 	void Start () 
 	{
-		filterList = GetComponentsInChildren<Filter>(true) as Filter[];
+		filterList = new List<Filter[]>();
+		cameraList = Resources.FindObjectsOfTypeAll<Camera>();
+		int c = 0;
+		foreach (Camera camera in cameraList)
+		{
+			filterList.Add(camera.GetComponentsInChildren<Filter>(true));
+			++c;
+		}
 	}
 
 	public void Zap ()
@@ -18,28 +28,38 @@ public class Zapping : MonoBehaviour
 
 	public void Clear ()
 	{
-		filterList = GetComponentsInChildren<Filter>(true) as Filter[];
-		foreach (Filter filter in filterList)
+		foreach (Camera camera in cameraList)
 		{
-            Destroy(filter);
+			Filter[] filters = camera.GetComponentsInChildren<Filter>() as Filter[];
+			foreach (Filter filter in filters)
+			{
+	            Destroy(filter);
+			}
 		}
 	}
 
 	void Shuffle ()
 	{
-		for (int i = filterList.Length - 1; i > 0; i--)
+		int c = 0;
+		foreach (Camera camera in cameraList)
 		{
-			int j = (int)Mathf.Floor(Random.Range(0f, 1f) * ((float)i + 1f));
-			Filter temp = filterList[i];
-			filterList[i] = filterList[j];
-			filterList[j] = temp;
-		}
+			Filter[] filters = filterList[c];
 
-		foreach (Filter filter in filterList)
-		{
-			Filter newFilter = gameObject.AddComponent(filter.GetType()) as Filter;
-			newFilter.enabled = Random.Range(0f, 1f) < 0.5f;
-			newFilter.Rumble();
+			for (int i = filters.Length - 1; i > 0; i--)
+			{
+				int j = (int)Mathf.Floor(Random.Range(0f, 1f) * ((float)i + 1f));
+				Filter temp = filters[i];
+				filters[i] = filters[j];
+				filters[j] = temp;
+			}
+			foreach (Filter filter in filters)
+			{
+				Filter newFilter = camera.gameObject.AddComponent(filter.GetType()) as Filter;
+				newFilter.enabled = Random.Range(0f, 1f) < 0.5f;
+				newFilter.Rumble();
+			}
+
+			++c;
 		}
 	}
 }
