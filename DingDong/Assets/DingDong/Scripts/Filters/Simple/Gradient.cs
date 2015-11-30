@@ -2,10 +2,10 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class Carpet : Filter 
+public class Gradient : Filter 
 {
 	void Awake ()
 	{
-		material = new Material( Shader.Find("Hidden/Carpet") );
+		material = new Material( Shader.Find("Hidden/Gradient") );
 	}
 }
