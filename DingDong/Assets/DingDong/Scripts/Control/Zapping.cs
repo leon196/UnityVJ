@@ -39,10 +39,10 @@ public class Zapping : MonoBehaviour
 			int f = 0;
 			foreach (Filter filter in filterList[c]) {
 				ZapState zapState = new ZapState(c, f);
-				if (filter.always) {
-					zapState.shouldAdd = false;
-					zapState.shouldClear = false;
-				}
+				// if (filter.always) {
+				// 	zapState.shouldAdd = false;
+				// 	zapState.shouldClear = false;
+				// }
 				zapStateList[c].Add(zapState);
 				++f;
 			}
@@ -59,8 +59,25 @@ public class Zapping : MonoBehaviour
 
 	public void Zap ()
     {
-        Clear();
-		Shuffle();
+        // Clear();
+		// Shuffle();
+		Rumble();
+	}
+
+	public void Rumble ()
+	{
+		int c = 0;
+		foreach (Camera camera in cameraList)
+		{
+			int f = 0;
+			Filter[] filters = camera.GetComponentsInChildren<Filter>() as Filter[];
+			foreach (Filter filter in filters)
+			{
+				filter.Rumble();
+				++f;
+			}
+		}
+		++c;
 	}
 
 	public void Clear ()
@@ -107,8 +124,8 @@ public class Zapping : MonoBehaviour
 			{
 				ZapState zapState = zapStateList[c][f];
 				if (zapState.shouldAdd) {
-					Filter newFilter = camera.gameObject.AddComponent(filter.GetType()) as Filter;
-					newFilter.enabled = Random.Range(0f, 1f) < 0.5f;
+					// Filter newFilter = camera.gameObject.AddComponent(filter.GetType()) as Filter;
+					// newFilter.enabled = Random.Range(0f, 1f) < 0.5f;
 				}
 				if (zapState.shouldRumble) {
 					Filter currentFilter = filterList[zapState.indexCamera][zapState.indexFilter];

@@ -78,7 +78,7 @@ Shader "Distortion/VertexLog" {
 
           v.vertex.xyz = rotateY(v.vertex.xyz, angle);*/
 
-          o.pos =  mul(_Object2World, v.vertex);
+          o.pos = v.vertex;//mul(_Object2World, v.vertex);
           o.normal = v.normal;
           o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
           o.screenUV = ComputeScreenPos(o.pos);
@@ -130,19 +130,19 @@ Shader "Distortion/VertexLog" {
           float4x4 vp = mul(UNITY_MATRIX_MVP, _World2Object);
 
           FS_INPUT pIn = (FS_INPUT)0;
-          pIn.pos = mul(vp, float4(a, 1.0));
+          pIn.pos = mul(vp, mul(_Object2World, float4(a, 1.0)));
           pIn.uv = tri[0].uv;
           pIn.normal = triNormal;
           pIn.color = half4(1.0,0.0,0.0,1.0);
           triStream.Append(pIn);
 
-          pIn.pos =  mul(vp, float4(b, 1.0));
+          pIn.pos =  mul(vp, mul(_Object2World, float4(b, 1.0)));
           pIn.uv = tri[1].uv;
           pIn.normal = triNormal;
           pIn.color = half4(0.0,1.0,0.0,0.0);
           triStream.Append(pIn);
 
-          pIn.pos =  mul(vp, float4(c, 1.0));
+          pIn.pos =  mul(vp, mul(_Object2World, float4(c, 1.0)));
           pIn.uv = tri[2].uv;
           pIn.normal = triNormal;
           pIn.color = half4(0.0,0.0,1.0,1.0);

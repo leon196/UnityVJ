@@ -2,7 +2,7 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class Glitch : Filter 
+public class Glitch : Persistence 
 {
 	void Awake ()
 	{

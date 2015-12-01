@@ -17,12 +17,8 @@ Shader "Hidden/Glitch" {
 			sampler2D _MainTex;
 			sampler2D _BufferTexture;
 			sampler2D _TextureFFT;
-
-			float _TimeElapsed;
-			float _RoundEffect;
-			float _RoundVideo;
-			float _RatioBufferTreshold;
-
+			
+			float _PersistenceTreshold;
 			float _GlobalFFT;
 			float _GlobalFFTTotal;
 
@@ -48,7 +44,7 @@ Shader "Hidden/Glitch" {
 				half4 renderTarget = cheesyBlur(_BufferTexture, uv - offset, _ScreenParams.xy);
 				// renderTarget.rgb *= 1.01;
 				half4 edge = filter(_MainTex, uv, _ScreenParams.xy);
-				half4 color = lerp(renderTarget, video, step(0.6, luminance(abs(video - renderTarget))));
+				half4 color = lerp(renderTarget, video, step(_PersistenceTreshold, luminance(abs(video - renderTarget))));
 				color = lerp(color, video, clamp(filter(_MainTex, uv, _ScreenParams.xy), 0.0, 1.0));
 
 				color.a = 1.0;

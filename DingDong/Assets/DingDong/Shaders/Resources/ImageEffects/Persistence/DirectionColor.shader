@@ -78,7 +78,7 @@
 				half4 video = tex2D(_MainTex, uv);
 				half4 renderTarget = tex2D(_BufferTexture, uv + offset);
 
-				renderTarget *= 0.99 + fftAcceleration * 0.04;
+				// renderTarget *= 0.99 + fftAcceleration * 0.04;
 				// float treshold = 0.2 + fftAcceleration * 0.8;
 				// float treshold = easeOutQuint(_GlobalFFT, 0.0, 1.0, 1.0);
 				half4 color = lerp(renderTarget, video, step(_PersistenceTreshold, distance(video.rgb, renderTarget.rgb)));

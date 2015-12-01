@@ -4,9 +4,6 @@ using System.Collections;
 [ExecuteInEditMode]
 public class Filter : MonoBehaviour 
 {
-	public bool always = false;
-	public bool before = false;
-	public bool after = false;
 	protected Material material;
 
 	// Creates a private material used to the effect

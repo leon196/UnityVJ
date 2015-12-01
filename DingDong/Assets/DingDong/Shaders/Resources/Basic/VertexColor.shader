@@ -27,7 +27,7 @@ Shader "DingDong/Basic/VertexColor" {
 
 			v2f vert (appdata_full v)
 			{
-				v2f o;
+          		v2f o = (v2f)0;
 				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
 				o.color = v.color;
