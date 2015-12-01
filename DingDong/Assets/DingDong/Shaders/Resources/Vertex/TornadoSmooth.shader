@@ -1,4 +1,4 @@
-Shader "Warband/TornadoSave" {
+Shader "DingDong/Vertex/TornadoSmooth" {
   Properties {
     _Color ("Color", Color) = (1,1,1,1)
     _MainTex ("Texture (RGB)", 2D) = "white" {}
@@ -90,24 +90,35 @@ Shader "Warband/TornadoSave" {
         GS_INPUT vert (appdata_full v)
         {
           GS_INPUT o = (GS_INPUT)0;
-          float3 position = mul(_Object2World, v.vertex).xyz;
+          float3 position = v.vertex.xyz;//mul(_Object2World, v.vertex).xyz;
+          float3 localPosition = mul(_World2Object, v.vertex).xyz;
           float t = cos(_Time * 10.0) * 0.5 + 0.5;
           float tt = _Time * 10.0;
           float radius = 5.0;
           float3 target = float3(cos(tt) * radius, 0.0, sin(tt) * radius);
           /*float dist = 1.0 / g2(length(position));//log(length(position));*/
           /*float fft = tex2Dlod(_TextureFFT, float4(clamp(sin(length(position) * 0.1) * 0.5 + 0.5, 0.0, 1.0), 0.0, 0, 0)).r;*/
+
           /*fft = log(fft);*/
           /*position.y += _GlobalFFT * 0.5;*/
-          float x = 1.0 - abs(fmod(length(v.vertex.xyz), 1.0) * 2.0 - 1.0);
+          /*float x = 1.0 - abs(fmod(length(v.vertex.xyz), 1.0) * 2.0 - 1.0);*/
+          float x = ((v.normal.x + v.normal.y + v.normal.z) / 3.0) * 0.5 + 0.5;
           float fft = tex2Dlod(_TextureFFT, float4(x, 0, 0, 0)).r;
-          float dist = log(length(position));
-          position = normalize(position) * (dist);
+          /*float dist = 10.0 / (log(length(position) * 1.0) + log(fft) * 0.5);*/
+          /*position += normalize(position) * (fft * 100.0);*/
+          /*position = rotateX(position, tt * 2.0);*/
+          /*position = rotateY(position, fft);*/
+          // float3 pp = normalize(position) * (fft * 8.0 + 2.0);
+          // position = position + rotateY(pp, length(position) + tt * 10.0);
           /*position = rotateX(position, sin(_GlobalFFT * 0.01));// + _GlobalFFTTotal * 0.001);*/
-          position = rotateY(position, dist + tt);// + _GlobalFFTTotal * 0.001);
-          position = rotateY(position, sin(dist + _GlobalFFT * 0.1));
+          /*position = rotateY(position, dist + tt);// + _GlobalFFTTotal * 0.001);*/
+          /*position = rotateY(position, sin(dist + _GlobalFFT * 0.01));*/
           /*v.vertex.xyz = rotateX(v.vertex.xyz, angle);*/
           /*position.x += sin(position.y);*/
+
+          float3 pp = normalize(position);
+          position = position + rotateY(pp, length(position) + tt * 10.0);
+
           o.pos =  mul(UNITY_MATRIX_MVP, float4(position, 1.0));
           o.normal = float4(v.normal, 1.0);
           o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);

@@ -1,4 +1,4 @@
-Shader "DingDong/Vertex/Tornado" {
+Shader "DingDong/Vertex/TornadoTriangle" {
   Properties {
     _Color ("Color", Color) = (1,1,1,1)
     _MainTex ("Texture (RGB)", 2D) = "white" {}

@@ -1,4 +1,4 @@
-﻿Shader "DingDong/Vertex/Landscape" {
+﻿Shader "DingDong/Vertex/LandscapeMemory" {
   Properties {
     _Color ("Color", Color) = (1,1,1,1)
     _MainTex ("Texture (RGB)", 2D) = "white" {}
