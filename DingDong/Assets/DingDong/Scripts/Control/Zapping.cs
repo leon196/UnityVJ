@@ -37,7 +37,8 @@ public class Zapping : MonoBehaviour
 			filterList.Add(camera.GetComponentsInChildren<Filter>(true));
 			zapStateList.Add(new List<ZapState>());
 			int f = 0;
-			foreach (Filter filter in filterList[c]) {
+			// foreach (Filter filter in filterList[c]) {
+			while (f < filterList[c].Length) {
 				ZapState zapState = new ZapState(c, f);
 				// if (filter.always) {
 				// 	zapState.shouldAdd = false;
@@ -102,8 +103,9 @@ public class Zapping : MonoBehaviour
 	void Shuffle ()
 	{
 		int c = 0;
-		foreach (Camera camera in cameraList)
-		{
+		// foreach (Camera camera in cameraList) {
+		while (c < cameraList.Length) {
+
 			Filter[] filters = filterList[c];
 
 			for (int i = filters.Length - 1; i > 0; i--)
@@ -120,8 +122,8 @@ public class Zapping : MonoBehaviour
 			}
 
 			int f = 0;
-			foreach (Filter filter in filters)
-			{
+			// foreach (Filter filter in filters) {
+			while (f < filters.Length) {
 				ZapState zapState = zapStateList[c][f];
 				if (zapState.shouldAdd) {
 					// Filter newFilter = camera.gameObject.AddComponent(filter.GetType()) as Filter;
