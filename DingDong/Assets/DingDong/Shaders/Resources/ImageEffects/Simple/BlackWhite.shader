@@ -1,10 +1,8 @@
-Shader "Hidden/Gradient"
+﻿Shader "Hidden/BlackWhite"
 {
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_ColorA ("Color A", Color) = (1,1,1,1)
-		_ColorB ("Color B", Color) = (1,1,1,1)
 	}
 	SubShader
 	{
@@ -18,8 +16,6 @@ Shader "Hidden/Gradient"
 			#pragma fragment frag
 			
 			#include "UnityCG.cginc"
-			#include "../../Utils/ClassicNoise2D.cginc"
-			#include "../../Utils/Utils.cginc"
 
 			struct appdata
 			{
@@ -42,18 +38,12 @@ Shader "Hidden/Gradient"
 			}
 			
 			sampler2D _MainTex;
-			sampler2D _BufferTexture;
-			fixed4 _ColorA;
-			fixed4 _ColorB;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				half4 color = tex2D(_MainTex, i.uv);
-
-				float lum = Luminance(color);
-				color.rgb = lerp(_ColorA, _ColorB, lum);
-
-				return color;
+				fixed4 col = tex2D(_MainTex, i.uv);
+				col.rgb = float3(1,1,1) * Luminance(col);
+				return col;
 			}
 			ENDCG
 		}
