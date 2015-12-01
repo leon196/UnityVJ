@@ -1,9 +1,10 @@
-Shader "Custom/Wireframe"
+Shader "Basic/Wireframe"
 {
   Properties
   {
     _Color ("Color", Color) = (1,1,1,1)
     _MainTex ("Texture (RGB)", 2D) = "white" {}
+    _WireframeSize ("Wireframe Size", Float) = 0.05
   }
   SubShader
   {
@@ -12,6 +13,8 @@ Shader "Custom/Wireframe"
     {
       Blend SrcAlpha OneMinusSrcAlpha
       LOD 200
+      Cull Off
+      ZWrite Off
 
       CGPROGRAM
       #pragma vertex vert
@@ -39,6 +42,7 @@ Shader "Custom/Wireframe"
       sampler2D _MainTex;
       float4 _MainTex_ST;
       fixed4 _Color;
+      float _WireframeSize;
 
       GS_INPUT vert (appdata_full v)
       {
@@ -77,23 +81,13 @@ Shader "Custom/Wireframe"
 
       half4 frag (FS_INPUT i) : COLOR
       {
-        float2 screenUV = i.screenUV.xy / i.screenUV.w;
-        half4 color = tex2D(_MainTex, i.uv);
-
-        float wireframeSize = 0.05;
-        float wireframeStep = 1.0 - smoothstep(0.0, wireframeSize, i.color.r);
-        wireframeStep += 1.0 - smoothstep(0.0, wireframeSize, i.color.g);
-        wireframeStep += 1.0 - smoothstep(0.0, wireframeSize, i.color.b);
+        float wireframeStep = 1.0 - smoothstep(0.0, _WireframeSize, i.color.r);
+        wireframeStep += 1.0 - smoothstep(0.0, _WireframeSize, i.color.g);
+        wireframeStep += 1.0 - smoothstep(0.0, _WireframeSize, i.color.b);
         wireframeStep = clamp(wireframeStep, 0.0, 1.0);
 
-        half3 wireframeColor = i.normal * 0.5 + 0.5;
-
-        // For wireframe with texture
-        color.rgb = lerp(color.rgb, wireframeColor, wireframeStep);
-
-        // For transparent wireframe
-        // color.a = wireframeStep;
-
+        half4 color = _Color * wireframeStep;
+        color.a = wireframeStep;
         return color;
       }
       ENDCG
