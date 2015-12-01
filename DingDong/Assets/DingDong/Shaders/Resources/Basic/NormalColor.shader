@@ -14,12 +14,13 @@ Shader "DingDong/Basic/NormalColor" {
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+        	#pragma target 3.0
 			#include "UnityCG.cginc"
 
 			struct v2f {
 				float4 pos : SV_POSITION;
 				float2 uv : TEXCOORD0;
-				float3 normal : NORMAL;
+				float4 normal : NORMAL;
 			};
 
 			sampler2D _MainTex;
@@ -31,7 +32,7 @@ Shader "DingDong/Basic/NormalColor" {
 				v2f o;
 				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
-				o.normal = v.normal;
+				o.normal = float4(v.normal, 1.0);
 				return o;
 			}
 

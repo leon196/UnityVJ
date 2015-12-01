@@ -14,12 +14,13 @@ Shader "Warband/TornadoSave" {
         CGPROGRAM
         #pragma vertex vert
         #pragma fragment frag
+        #pragma target 3.0
         #include "UnityCG.cginc"
 
         struct GS_INPUT
         {
           float4 pos		: POSITION;
-          float3 normal	: NORMAL;
+          float4 normal	: NORMAL;
           float2 uv	: TEXCOORD0;
           float4 screenUV : TEXCOORD1;
           float4 color : COLOR;
@@ -30,7 +31,7 @@ Shader "Warband/TornadoSave" {
           float2 uv : TEXCOORD0;
           float4 screenUV : TEXCOORD1;
           half4 color : COLOR;
-          float3 normal : NORMAL;
+          float4 normal : NORMAL;
         };
 
         sampler2D _MainTex;
@@ -108,7 +109,7 @@ Shader "Warband/TornadoSave" {
           /*v.vertex.xyz = rotateX(v.vertex.xyz, angle);*/
           /*position.x += sin(position.y);*/
           o.pos =  mul(UNITY_MATRIX_MVP, float4(position, 1.0));
-          o.normal = v.normal;
+          o.normal = float4(v.normal, 1.0);
           o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
           o.screenUV = ComputeScreenPos(o.pos);
           return o;

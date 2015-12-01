@@ -14,11 +14,9 @@ Shader "Custom/GlitchScanline" {
 		    #pragma vertex vert
 		    #pragma fragment frag   
 	    	#include "UnityCG.cginc"   
-	    	#include "../Utils.cginc"   
+	    	#include "../Utils/Utils.cginc"   
 			// https://github.com/ashima/webgl-noise
-	    	#include "../ClassicNoise2D.cginc"   
-	    	#define PI 3.141592653589
-			#define PI2 6.283185307179
+	    	#include "../Utils/ClassicNoise2D.cginc"   
 
 		    struct v2f 
 		    {

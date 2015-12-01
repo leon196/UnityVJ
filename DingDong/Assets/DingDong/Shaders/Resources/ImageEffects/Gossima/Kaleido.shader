@@ -17,6 +17,7 @@
 			
 			#include "UnityCG.cginc"
 			#include "../../Utils/Utils.cginc"
+			#pragma target 3.0
 
 			struct appdata
 			{

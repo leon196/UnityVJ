@@ -14,11 +14,12 @@ Shader "Distortion/Vortex" {
         #pragma vertex vert
         #pragma fragment frag
         #include "UnityCG.cginc"
+        #pragma target 3.0
 
 				struct GS_INPUT
 				{
 					float4 pos		: POSITION;
-					float3 normal	: NORMAL;
+					float4 normal	: NORMAL;
 					float2 uv	: TEXCOORD0;
           float4 screenUV : TEXCOORD1;
 				};
@@ -28,7 +29,7 @@ Shader "Distortion/Vortex" {
           float2 uv : TEXCOORD0;
           float4 screenUV : TEXCOORD1;
           half4 color : COLOR;
-          float3 normal : NORMAL;
+          float4 normal : NORMAL;
         };
 
         sampler2D _MainTex;
@@ -55,7 +56,7 @@ Shader "Distortion/Vortex" {
           float angle = 1.0 / dist * t;
           v.vertex.xyz = rotateY(v.vertex.xyz, angle);
           o.pos =  mul(UNITY_MATRIX_MVP, v.vertex);
-          o.normal = v.normal;
+          o.normal = float4(v.normal, 1.0);
           o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
           o.screenUV = ComputeScreenPos(o.pos);
           return o;

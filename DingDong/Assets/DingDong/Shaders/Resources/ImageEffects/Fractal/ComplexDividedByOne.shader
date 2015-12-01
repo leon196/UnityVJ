@@ -9,6 +9,7 @@ Shader "Hidden/ComplexDividedByOne" {
 			CGPROGRAM
 			#pragma vertex vert_img
 			#pragma fragment frag
+      #pragma target 3.0
 
 			#include "UnityCG.cginc"
       #include "../../Utils/Utils.cginc"
