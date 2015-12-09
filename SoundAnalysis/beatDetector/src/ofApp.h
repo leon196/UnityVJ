@@ -23,9 +23,14 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-    
+        void setupArduino(const int & version);
+        void arduinoLoop();
         void audioReceived(float*, int, int);
         ofxPanel gui;
         ofxLabel kick, snare, hithat;
+        ofArduino arduino;
+        ofTrueTypeFont bisous;
+        bool isArduinoSet;
         float barWidth, circleSeparation;
+
 };

@@ -1,70 +1,63 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
+void ofApp::setupArduino(const int & version) {
+    ofRemoveListener(arduino.EInitialized, this, &ofApp::setupArduino);
+    arduino.sendDigitalPinMode(11, ARD_OUTPUT);
+    isArduinoSet = true;
+}
+//--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
     ofEnableSmoothing();
     ofSoundStreamSetup(0, 1, this, 44100, beat.getBufferSize(), 4);
-    
-    //setup UI elements
-    gui.setup();
-    
-    gui.add(kick.setup("kick", ofToString(0)));
-    gui.add(hithat.setup("hithat", ofToString(0)));
-    gui.add(snare.setup("snare", ofToString(0)));
-    
     barWidth = ofGetWidth() / 32;
-    circleSeparation = ofGetWidth() / 4;
+    arduino.connect("/dev/tty.usbmodem1421", 57600);
+    ofAddListener(arduino.EInitialized, this, &ofApp::setupArduino);
+    isArduinoSet = false;
+
+    bisous.load("bisous.ttf", 20, true, true);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     beat.update(ofGetElapsedTimeMillis());
+    ofApp::arduinoLoop();
+}
+
+//--------------------------------------------------------------
+void ofApp::arduinoLoop(){
+    if (isArduinoSet){
+        float kickValue = beat.kick();
+        if (kickValue == 1) {
+            arduino.sendDigital(11, ARD_HIGH);
+        } else {
+            arduino.sendDigital(11, ARD_LOW);
+        }
+    }
+    arduino.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    string message = "";
     ofBackground(0);
-
-    float kickValue = beat.kick();
-    float snareValue = beat.snare();
-    float hithatValue = beat.hihat();
+    ofSetColor(179, 71, 255);
     
     for (int i = 0; i < 32; i++) {
         float selectedBand = beat.getBand(i);
-        ofSetColor(179, 71, 255); // Set the drawing color to white
         ofFill();
         ofRect(i * barWidth, ofGetHeight(), barWidth, -(selectedBand*100));
         ofNoFill();
     }
-    
-    kick = ofToString(kickValue);
-    snare = ofToString(snareValue);
-    hithat = ofToString(hithatValue);
-    
-    
-   
-    if (kickValue == 1) {
-        ofSetColor(255,0,0);
-        ofFill();
-        ofCircle(circleSeparation, ofGetHeight()/2, 50);
-        ofNoFill();
-    }
-    if (snareValue == 1) {
-        ofSetColor(255, 133, 44);
-        ofFill();
-        ofCircle(circleSeparation*2, ofGetHeight()/2, 50);
-        ofNoFill();
-    }
-    if (hithatValue == 1) {
-        ofSetColor(255, 239, 0);
-        ofFill();
-        ofCircle(circleSeparation*3, ofGetHeight()/2, 50);
-        ofNoFill();
-    }
 
-    
-    gui.draw();
+    if (!isArduinoSet){
+        message = "Waiting for arduino...";
+    } else {
+        message = "nanoKiss";
+    }
+    ofRectangle rect = bisous.getStringBoundingBox(message, 0,0);
+    bisous.drawString(message, ofGetWidth()/2 - rect.width/2, 50);
 }
 
 //--------------------------------------------------------------
@@ -74,7 +67,6 @@ void ofApp::audioReceived(float* input, int bufferSize, int nChannels) {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
 }
 
 //--------------------------------------------------------------
@@ -114,7 +106,7 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+        barWidth = w / 32;
 }
 
 //--------------------------------------------------------------
