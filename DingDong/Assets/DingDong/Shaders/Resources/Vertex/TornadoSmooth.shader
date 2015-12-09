@@ -96,25 +96,6 @@ Shader "DingDong/Vertex/TornadoSmooth" {
           float tt = _Time * 10.0;
           float radius = 5.0;
           float3 target = float3(cos(tt) * radius, 0.0, sin(tt) * radius);
-          /*float dist = 1.0 / g2(length(position));//log(length(position));*/
-          /*float fft = tex2Dlod(_TextureFFT, float4(clamp(sin(length(position) * 0.1) * 0.5 + 0.5, 0.0, 1.0), 0.0, 0, 0)).r;*/
-
-          /*fft = log(fft);*/
-          /*position.y += _GlobalFFT * 0.5;*/
-          /*float x = 1.0 - abs(fmod(length(v.vertex.xyz), 1.0) * 2.0 - 1.0);*/
-          float x = ((v.normal.x + v.normal.y + v.normal.z) / 3.0) * 0.5 + 0.5;
-          float fft = tex2Dlod(_TextureFFT, float4(x, 0, 0, 0)).r;
-          /*float dist = 10.0 / (log(length(position) * 1.0) + log(fft) * 0.5);*/
-          /*position += normalize(position) * (fft * 100.0);*/
-          /*position = rotateX(position, tt * 2.0);*/
-          /*position = rotateY(position, fft);*/
-          // float3 pp = normalize(position) * (fft * 8.0 + 2.0);
-          // position = position + rotateY(pp, length(position) + tt * 10.0);
-          /*position = rotateX(position, sin(_GlobalFFT * 0.01));// + _GlobalFFTTotal * 0.001);*/
-          /*position = rotateY(position, dist + tt);// + _GlobalFFTTotal * 0.001);*/
-          /*position = rotateY(position, sin(dist + _GlobalFFT * 0.01));*/
-          /*v.vertex.xyz = rotateX(v.vertex.xyz, angle);*/
-          /*position.x += sin(position.y);*/
 
           float3 pp = normalize(position);
           position = position + rotateY(pp, length(position) + tt * 10.0);

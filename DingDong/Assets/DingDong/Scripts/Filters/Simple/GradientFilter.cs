@@ -2,7 +2,7 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class Gradient : Filter 
+public class GradientFilter : Filter 
 {
 	public Color colorA;
 	public Color colorB;
