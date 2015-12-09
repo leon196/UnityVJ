@@ -8,29 +8,50 @@ void ofApp::setupArduino(const int & version) {
 }
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetVerticalSync(true);
-    ofEnableSmoothing();
-    ofSoundStreamSetup(0, 1, this, 44100, beat.getBufferSize(), 4);
-    barWidth = ofGetWidth() / 32;
+    //OSC open to HOST:PORT
+    
+    sender.setup(HOST, PORT);
+    
     arduino.connect("/dev/tty.usbmodem1421", 57600);
     ofAddListener(arduino.EInitialized, this, &ofApp::setupArduino);
-    isArduinoSet = false;
+    
+    ofSoundStreamSetup(0, 1, this, 44100, beat.getBufferSize(), 4);
+    ofSetVerticalSync(true);
+    ofEnableSmoothing();
 
+    barWidth = ofGetWidth() / 32;
+    isArduinoSet = false;
+    
     bisous.load("bisous.ttf", 20, true, true);
+    osc_message.load("bisous.ttf", 10, true, true);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     beat.update(ofGetElapsedTimeMillis());
+    
+    float kickValue = beat.kick();
+    if (kickValue == 1) {
+        ofxOscMessage m;
+        m.setAddress("/kick");
+        m.addIntArg(1);
+        sender.sendMessage(m);
+    } else {
+        ofxOscMessage m;
+        m.setAddress("/kick");
+        m.addIntArg(0);
+        sender.sendMessage(m);
+    }
+    
     ofApp::arduinoLoop();
 }
 
 //--------------------------------------------------------------
 void ofApp::arduinoLoop(){
     if (isArduinoSet){
-        float kickValue = beat.kick();
-        if (kickValue == 1) {
+        if (beat.kick() == 1) {
             arduino.sendDigital(11, ARD_HIGH);
+
         } else {
             arduino.sendDigital(11, ARD_LOW);
         }
@@ -58,6 +79,13 @@ void ofApp::draw(){
     }
     ofRectangle rect = bisous.getStringBoundingBox(message, 0,0);
     bisous.drawString(message, ofGetWidth()/2 - rect.width/2, 50);
+    
+    ofSetColor(255, 0, 0);
+    if (beat.kick() == 1) {
+        message = "OSC send ...";
+        ofRectangle rect = osc_message.getStringBoundingBox(message, 0,0);
+        osc_message.drawString(message, ofGetWidth()/2 - rect.width/2, 80);
+    }
 }
 
 //--------------------------------------------------------------

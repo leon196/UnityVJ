@@ -3,6 +3,10 @@
 #include "ofMain.h"
 #include "ofxBeat.h"
 #include "ofxGui.h"
+#include "ofxOsc.h"
+
+#define HOST "localhost"
+#define PORT 12345
 
 class ofApp : public ofBaseApp{
     ofxBeat beat;
@@ -26,11 +30,10 @@ class ofApp : public ofBaseApp{
         void setupArduino(const int & version);
         void arduinoLoop();
         void audioReceived(float*, int, int);
-        ofxPanel gui;
-        ofxLabel kick, snare, hithat;
         ofArduino arduino;
-        ofTrueTypeFont bisous;
+        ofxOscSender sender;
+        ofTrueTypeFont bisous, osc_message;
         bool isArduinoSet;
-        float barWidth, circleSeparation;
+        float barWidth;
 
 };
