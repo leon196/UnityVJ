@@ -18,14 +18,14 @@ public class VideoTexture : MonoBehaviour
 		WWW www = new WWW(URL);
 
 		MovieTexture movieTexture = www.movie as MovieTexture;
-        movieTexture.loop = true;
+		movieTexture.loop = true;
 
-        while (!movieTexture.isReadyToPlay) {
-            yield return 0;
-        }
+		while (!movieTexture.isReadyToPlay) {
+			yield return 0;
+		}
 
-        videoMaterial.mainTexture = movieTexture;
+		videoMaterial.mainTexture = movieTexture;
 		Shader.SetGlobalTexture("_VideoTexture", movieTexture);
-        movieTexture.Play();
+		movieTexture.Play();
 	}
 }
