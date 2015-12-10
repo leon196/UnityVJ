@@ -67,14 +67,14 @@
 
 				dist = pow(0.1 + dist * 6.0, 2.0) ;
 
-				float fftAcceleration = 0.25 + _ReaktorOutput * 0.75;//clamp((fft + _GlobalFFT) * 0.5, 0.0, 1.0);//(0.1 + pow(fft, 2.0) * 0.5 + pow(_GlobalFFT, 2.0));
+				float fftAcceleration = _ReaktorOutput;//clamp((fft + _GlobalFFT) * 0.5, 0.0, 1.0);//(0.1 + pow(fft, 2.0) * 0.5 + pow(_GlobalFFT, 2.0));
 
-				float2 offset = float2(cos(angle) * dist, sin(angle) * dist) * 0.008 * fftAcceleration;
+				float2 offset = float2(cos(angle) * dist, sin(angle) * dist) * 0.004 * fftAcceleration;
 				angle = rand(uv) * PI2;
-				offset += float2(cos(angle), sin(angle)) * 0.001 * fftAcceleration;
+				offset += float2(cos(angle), sin(angle)) * 0.002 * fftAcceleration;
 
 				angle = luminance(tex2D(_MainTex, uv).rgb) * PI2;
-				offset += float2(cos(angle), sin(angle)) * 0.01 * fftAcceleration;
+				offset += float2(cos(angle), sin(angle)) * 0.006 * fftAcceleration;
 
 				half4 video = tex2D(_MainTex, uv);
 				half4 renderTarget = tex2D(_BufferTexture, uv + offset);
@@ -82,7 +82,7 @@
 				// renderTarget *= 0.99 + fftAcceleration * 0.04;
 				// float treshold = 0.2 + fftAcceleration * 0.8;
 				// float treshold = easeOutQuint(_GlobalFFT, 0.0, 1.0, 1.0);
-				half4 color = lerp(renderTarget, video, step(0.5, distance(video.rgb, renderTarget.rgb)));
+				half4 color = lerp(renderTarget, video, step(fftAcceleration, distance(video.rgb, renderTarget.rgb)));
     			// color = lerp(color, video, clamp(luminance(filter(_MainTex, uv, _ScreenParams.xy)), 0.0, 1.0));
 				//distance(video.rgb, renderTarget.rgb)
 				//Luminance(abs(video - renderTarget))
