@@ -89,7 +89,7 @@ Shader "Hidden/Splashes"
 				// float treshold = easeInOutSine(_GlobalFFT, 0.0, 1.0, 1.0);
 				// float treshold = easeOutCirc(_GlobalFFT, 0.0, 1.0, 0.5);
 				// half4 color = lerp(video, renderTarget, step(1.0 - treshold, luminance(abs(video.rgb - renderTarget.rgb))));
-				half4 color = lerp(video, renderTarget, _ReaktorOutput);//step(treshold, distance(video.rgb, renderTarget.rgb)));
+				half4 color = lerp(video, renderTarget, step(fftAcceleration, distance(video.rgb, renderTarget.rgb)));
 				// half4 color = lerp(renderTarget, video, step(treshold, distance(video.rgb, renderTarget.rgb)));
     			// color = lerp(color, video, clamp(luminance(filter(_MainTex, uv, _ScreenParams.xy)), 0.0, 1.0));
 				//distance(video.rgb, renderTarget.rgb)
