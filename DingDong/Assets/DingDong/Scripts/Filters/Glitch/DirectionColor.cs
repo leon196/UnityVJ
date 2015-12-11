@@ -2,7 +2,7 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class DirectionColor : Persistence 
+public class DirectionColor : Filter 
 {
 	void Awake ()
 	{
