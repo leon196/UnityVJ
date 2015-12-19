@@ -45,13 +45,15 @@ Shader "Hidden/Gradient"
 			sampler2D _BufferTexture;
 			fixed4 _ColorA;
 			fixed4 _ColorB;
+			fixed4 _ColorC;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
 				half4 color = tex2D(_MainTex, i.uv);
 
 				float lum = Luminance(color);
-				color.rgb = lerp(_ColorA, _ColorB, lum);
+				color.rgb = lerp(_ColorA, _ColorB, smoothstep(0.0, 0.5, lum));
+				color.rgb = lerp(color.rgb, _ColorC, smoothstep(0.5, 1.0, lum));
 
 				return color;
 			}

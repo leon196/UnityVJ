@@ -22,23 +22,26 @@ Shader "Hidden/GlitchScanline" {
 			{
 				float2 uv = i.uv;
 
-        float random1 = (noiseIQ(pixelize(uv + float2(0, _Time * 0.0001), pow(2.0, 10.0)).yy) - 0.5) * 2.0;
-        float random2 = (noiseIQ(pixelize(uv - float2(0, _Time * 0.0001), pow(2.0, 7.0)).yy) - 0.5) * 2.0;
-        float random3 = noiseIQ(pixelize(float2(0, _Time), pow(2.0, 4.0)).yy);
+				float2 center = float2(0.5, 0.5);
+				float2 r1res = pow(2.0, 10.0);
+				float2 r2res = pow(2.0, 7.0);
+				float2 r3res = pow(2.0, 4.0);
+				float t = _Time * 0.1;
+				float tt = _Time;
+				float scale = _ReaktorOutput * 200.0 + 100.0;
+        float random1 = (cnoise(pixelize(uv + float2(0, t), r1res).yy * scale) - center) * 2.0;
+        float random2 = (cnoise(pixelize(uv - float2(0, t), r2res).yy * scale) - center) * 2.0;
 
-        /*float timing = (cos(_Time * 0.001) * 0.5 + 0.5);
-        float timingGlitch = step(random3, timing);*/
+        float4 tex = tex2D(_MainTex, uv);
 
-        float4 texture = tex2D (_MainTex, uv);
+        float2 scanlineGlitch =  float2(random2 * random1, 0) * 0.02 * _ReaktorOutput;
+        float2 offsetRed = float2(0.01, 0.005) * _ReaktorOutput * 2.0;
+        float2 offsetGreen = float2(0, 0) * _ReaktorOutput * 2.0;
+        float2 offsetBlue = float2(-0.01, 0.005) * _ReaktorOutput * 2.0;
 
-        float2 scanlineGlitch =  float2(random2 * random1 * uOffsetGlitch, 0) * uSliderGlitch;
-        float2 offsetRed = float2(0.01, 0.005) * uSliderRGB;
-        float2 offsetGreen = float2(0, 0) * uSliderRGB;
-        float2 offsetBlue = float2(-0.01, 0.005) * uSliderRGB;
+        float luminance = tex.r * .2126 + tex.g * .7152 + tex.b * .0722;
 
-        float luminance = texture.r * .2126 + texture.g * .7152 + texture.b * .0722;
-
-        uv += (float2(0.5, 0.5)) * luminance;
+        // uv += (float2(0.5, 0.5)) * luminance;
 
         uv += scanlineGlitch;
 
