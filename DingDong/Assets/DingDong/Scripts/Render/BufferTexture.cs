@@ -3,18 +3,29 @@ using System.Collections;
 
 public class BufferTexture : MonoBehaviour
 {
+	public Camera cameraRender;
 	public Camera cameraBuffer;
-	public Material materialRender;
+	public Material materialBuffer;
+	public Material materialPostRender;
 
 	float pixelSize = 1f;
 	int currentTexture;
 	RenderTexture[] textures;
+	RenderTexture textureBaked;
 
 	void Start ()
 	{
+		// Double Buffer
 		currentTexture = 0;
 		textures = new RenderTexture[2];
 		CreateTextures();
+
+		// Post render
+		textureBaked = new RenderTexture((int)Screen.width, (int)Screen.height, 24, RenderTextureFormat.ARGB32);
+		textureBaked.Create();
+		textureBaked.filterMode = FilterMode.Point;
+		cameraRender.targetTexture = textureBaked;
+		materialPostRender.mainTexture = textureBaked;
 	}
 
 	void Update ()
@@ -22,7 +33,7 @@ public class BufferTexture : MonoBehaviour
 		Shader.SetGlobalTexture("_BufferTexture", GetCurrentTexture());
 		NextTexture();
 		cameraBuffer.targetTexture = GetCurrentTexture();
-		materialRender.mainTexture = GetCurrentTexture();
+		materialBuffer.mainTexture = GetCurrentTexture();
 	}
 
 	void NextTexture ()
