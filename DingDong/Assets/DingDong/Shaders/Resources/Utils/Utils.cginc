@@ -17,6 +17,11 @@ float2 pixelize(float2 uv, float segments)
 	return floor(uv * segments) / segments;
 }
 
+float2 pixelize(float2 uv, float2 segments)
+{
+	return floor(uv * segments) / segments;
+}
+
 float4 posterize ( float4 color, float segments )
 {
 	return float4(floor(color.rgb * segments) / segments, 1.0);
@@ -65,7 +70,7 @@ float reflectance(float3 a, float3 b)
 half4 filter (sampler2D bitmap, float2 uv, float2 dimension)
 {
   half4 color = half4(0.0, 0.0, 0.0, 0.0);
-  
+
   color += -1.0 * tex2D(bitmap, uv + float2(-2, -2) / dimension);
   color += -1.0 * tex2D(bitmap, uv + float2(-2, -1) / dimension);
   color += -1.0 * tex2D(bitmap, uv + float2(-2,  0) / dimension);
@@ -89,7 +94,7 @@ half4 filter (sampler2D bitmap, float2 uv, float2 dimension)
   color += -1.0 * tex2D(bitmap, uv + float2( 1,  0) / dimension);
   color += -1.0 * tex2D(bitmap, uv + float2( 1,  1) / dimension);
   color += -1.0 * tex2D(bitmap, uv + float2( 1,  2) / dimension);
-  
+
   color += -1.0 * tex2D(bitmap, uv + float2( 2, -2) / dimension);
   color += -1.0 * tex2D(bitmap, uv + float2( 2, -1) / dimension);
   color += -1.0 * tex2D(bitmap, uv + float2( 2,  0) / dimension);
