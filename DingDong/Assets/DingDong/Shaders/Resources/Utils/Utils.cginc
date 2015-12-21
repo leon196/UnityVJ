@@ -107,11 +107,11 @@ half4 filter (sampler2D bitmap, float2 uv, float2 dimension)
 half4 cheesyBlur (sampler2D bitmap, float2 uv, float2 dimension)
 {
   half4 color = half4(0.0, 0.0, 0.0, 0.0);
-  color += 0.2 * tex2D(bitmap, uv + float2(-1, -1) / dimension);
-  color += 0.2 * tex2D(bitmap, uv + float2(-1,  0) / dimension);
-  color += 0.2 * tex2D(bitmap, uv + float2(-2,  0) / dimension);
-  color += 0.2 * tex2D(bitmap, uv + float2( 0, -1) / dimension);
-  color += 0.2 * tex2D(bitmap, uv + float2( 0,  0) / dimension);
+  color += 0.2 * tex2D(bitmap, uv + float2(0, 0) / dimension);
+  color += 0.2 * tex2D(bitmap, uv + float2(0,  -1) / dimension);
+  color += 0.2 * tex2D(bitmap, uv + float2( -1, 0) / dimension);
+  color += 0.2 * tex2D(bitmap, uv + float2( 0,  1) / dimension);
+  color += 0.2 * tex2D(bitmap, uv + float2( 1,  0) / dimension);
   return color;
 }
 
