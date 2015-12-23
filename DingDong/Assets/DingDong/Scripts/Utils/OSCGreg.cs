@@ -30,9 +30,9 @@ public class OSCGreg : MonoBehaviour {
 	//These functions are called when messages are received
 	//Access values via: oscMessage.Values[0], oscMessage.Values[1], etc
 	public void AllMessageHandler (OscMessage oscMessage) {
-		string msgString = Osc.OscMessageToString(oscMessage); //the message and value combined
+		//string msgString = Osc.OscMessageToString(oscMessage); //the message and value combined
 		string msgAddress = oscMessage.Address; //the message parameters
-		float msgValue = (float)oscMessage.Values[0]; //the message value
+		//float msgValue = (float)oscMessage.Values[0]; //the message value
 		//FUNCTIONS YOU WANT CALLED WHEN A SPECIFIC MESSAGE IS RECEIVED
 		switch (msgAddress){
 			case "/kick": {

@@ -6,7 +6,7 @@ public class WebcamTexture : MonoBehaviour {
 	public Material materialWebcam;
 	public Material materialDifference;
 	public float differenceTreshold = 0.3f;
-	public float differenceRefreshTreshold = 0.5f;
+	public float differenceRefreshTreshold = 0.03f;
 	public float differenceFadeOutRatio = 0.95f;
 	WebCamTexture textureWebcam;
 	Texture2D textureDiff;
@@ -46,10 +46,10 @@ public class WebcamTexture : MonoBehaviour {
 		if (textureWebcam) {
 			Color[] colorPixelArray = textureWebcam.GetPixels();
 			for (int i = 0; i < colorArray.Length; ++i) {
-				Color currentColor = colorArray[i];
+				//Color currentColor = colorArray[i];
 				Color newColor = colorPixelArray[i];
 				Color bufferColor = colorBufferArray[i];
-				float lumCurrent = (currentColor.r + currentColor.g + currentColor.b) / 3.0f;
+				//float lumCurrent = (currentColor.r + currentColor.g + currentColor.b) / 3.0f;
 				float lumNew = (newColor.r + newColor.g + newColor.b) / 3.0f;
 				float lumBuffer = (bufferColor.r + bufferColor.g + bufferColor.b) / 3.0f;
 				float lum = Mathf.Abs(lumNew - lumBuffer);

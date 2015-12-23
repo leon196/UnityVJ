@@ -59,7 +59,7 @@ public class ObjectParticleSystem : MonoBehaviour
 
             o.transform.position = prefab.transform.position + p.position;
             o.transform.localRotation = Quaternion.AngleAxis(p.rotation, p.axisOfRotation) * prefab.transform.rotation;
-            o.transform.localScale = prefab.transform.localScale * p.size;
+            // o.transform.localScale = prefab.transform.localScale * p.size;
         }
 
         for (var i = count; i < pool.Length; i++)
