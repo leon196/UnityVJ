@@ -11,7 +11,9 @@ namespace DingDong {
 		float lastTime;
 
 		void Start () {
+#if !UNITY_EDITOR
 			Cursor.visible = false;
+#endif
 			lastTime = Time.time;
 			filterArray = cameraEffect.GetComponents<Filter>();
 			for (int i = 0; i < filterArray.Length; ++i) {
