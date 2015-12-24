@@ -7,7 +7,7 @@ namespace DingDong {
 		public Camera cameraEffect;
 		int currentFilter = 0;
 		Filter[] filterArray;
-		float delay = 10f;
+		public float delay = 10f;
 		float lastTime;
 
 		void Start () {

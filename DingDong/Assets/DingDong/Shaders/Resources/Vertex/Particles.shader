@@ -102,9 +102,9 @@ Shader "DingDong/Vertex/Particles" {
       float offset = a.y;//sin(a.x);//noiseIQ(triNormal * 100.0);
 
       float distRatio = dentDeScie(t + offset * 4.0) * 0.5;//fmod(t + offset, 1.0);
-      // float distRatio2 = smoothstep(0.5, 1.0, distRatio);
-      // float dist = distRatio2 * 0.1;
-      float dist = distRatio * 0.1;
+      float distRatio2 = smoothstep(0.5, 1.0, distRatio);
+      float dist = distRatio2 * 0.1;
+      // float dist = distRatio * 0.1;
 
       // Shrink
       a = lerp(a, center, distRatio);
@@ -117,10 +117,10 @@ Shader "DingDong/Vertex/Particles" {
       c += triNormal * dist;
 
       // Rotate
-      a = rotateY(a, angle * distRatio);
-      b = rotateY(b, angle * distRatio);
-      c = rotateY(c, angle * distRatio);
-      
+      a = rotateY(a, angle * distRatio2);
+      b = rotateY(b, angle * distRatio2);
+      c = rotateY(c, angle * distRatio2);
+
       triNormal = getNormal(a, b, c);
 
       FS_INPUT pIn = (FS_INPUT)0;
