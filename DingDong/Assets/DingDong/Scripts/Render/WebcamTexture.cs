@@ -8,7 +8,7 @@ public class WebcamTexture : MonoBehaviour {
 	public float differenceTreshold = 0.3f;
 	public float differenceRefreshTreshold = 0.03f;
 	public float differenceFadeOutRatio = 0.95f;
-	WebCamTexture textureWebcam;
+	public WebCamTexture textureWebcam;
 	Texture2D textureDiff;
 	Color[] colorArray;
 	Color[] colorBufferArray;
@@ -21,7 +21,7 @@ public class WebcamTexture : MonoBehaviour {
 	Vector2 p = Vector2.zero;
 	// Vector2 point = Vector2.zero;
 
-	void Start () {
+	void Awake () {
 			
 		Shader.SetGlobalFloat("_FadeOutRatio", differenceFadeOutRatio);
 
