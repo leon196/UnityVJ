@@ -13,6 +13,7 @@ public class VideoTexture : MonoBehaviour
 
 	IEnumerator LoadMovieTexture ()
 	{
+#if !UNITY_WEBGL
 		string URL = "file://" + Application.dataPath + "/StreamingAssets/" + videoName;
 
 		WWW www = new WWW(URL);
@@ -27,5 +28,8 @@ public class VideoTexture : MonoBehaviour
 		videoMaterial.mainTexture = movieTexture;
 		Shader.SetGlobalTexture("_VideoTexture", movieTexture);
 		movieTexture.Play();
+#else
+		yield return 0;
+#endif
 	}
 }

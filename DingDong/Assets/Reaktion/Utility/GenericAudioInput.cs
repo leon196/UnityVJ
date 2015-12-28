@@ -47,7 +47,9 @@ public class GenericAudioInput : MonoBehaviour
         if (paused)
         {
             audioSource.Stop();
+#if !UNITY_WEBGL
             Microphone.End(null);
+#endif
             audioSource.clip = null;
         }
         else
@@ -56,8 +58,8 @@ public class GenericAudioInput : MonoBehaviour
 
     void StartInput()
     {
+#if !UNITY_WEBGL
         var sampleRate = AudioSettings.outputSampleRate;
-
         // Create a clip which is assigned to the default microphone.
         audioSource.clip = Microphone.Start(null, true, 1, sampleRate);
 
@@ -75,6 +77,7 @@ public class GenericAudioInput : MonoBehaviour
         }
         else
             Debug.LogWarning("GenericAudioInput: Initialization failed.");
+#endif
     }
 }
 

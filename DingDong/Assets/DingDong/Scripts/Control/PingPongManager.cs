@@ -4,7 +4,7 @@ using System.Collections;
 public class PingPongManager : MonoBehaviour {
 
 	ParticleSystem emitter;
-	WebcamTexture webcam;
+	WebcamManager webcam;
 	public Transform bonus;
 	public Transform focus;
 	public Camera cameraParticles;
@@ -12,7 +12,7 @@ public class PingPongManager : MonoBehaviour {
 
 	void Start () {
 		emitter = GameObject.FindObjectOfType<ParticleSystem>();
-		webcam = GameObject.FindObjectOfType<WebcamTexture>();
+		webcam = GameObject.FindObjectOfType<WebcamManager>();
 		RandomPoint();
 	}
 	

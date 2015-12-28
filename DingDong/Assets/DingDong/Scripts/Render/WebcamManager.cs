@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WebcamTexture : MonoBehaviour {
+public class WebcamManager : MonoBehaviour {
 
 	public Material materialWebcam;
 	public Material materialDifference;
 	public float differenceTreshold = 0.3f;
 	public float differenceRefreshTreshold = 0.03f;
 	public float differenceFadeOutRatio = 0.95f;
-	public WebCamTexture textureWebcam;
+	public WebCamTexture texture;
 	Texture2D textureDiff;
 	Color[] colorArray;
 	Color[] colorBufferArray;
@@ -28,24 +28,24 @@ public class WebcamTexture : MonoBehaviour {
 		if (WebCamTexture.devices.Length > 0) {
 
 			// Setup webcam texture
-			textureWebcam = new WebCamTexture();
-			textureWebcam.Play();
-			textureWebcam.filterMode = FilterMode.Point;
-			Shader.SetGlobalTexture("_WebcamTexture", textureWebcam);
+			texture = new WebCamTexture();
+			texture.Play();
+			texture.filterMode = FilterMode.Point;
+			Shader.SetGlobalTexture("_WebcamTexture", texture);
 			if (materialWebcam != null) {
-				materialWebcam.mainTexture = textureWebcam;
+				materialWebcam.mainTexture = texture;
 			}
 
 			// Setup color array
-			colorArray = new Color[textureWebcam.width * textureWebcam.height];
-			colorBufferArray = new Color[textureWebcam.width * textureWebcam.height];
+			colorArray = new Color[texture.width * texture.height];
+			colorBufferArray = new Color[texture.width * texture.height];
 			for (int i = 0; i < colorArray.Length; ++i) {
 				colorArray[i] = Color.black;
 				colorBufferArray[i] = Color.black;
 			}
 
 			// Setup procedural texture
-			textureDiff = new Texture2D(textureWebcam.width, textureWebcam.height, TextureFormat.ARGB32, false);
+			textureDiff = new Texture2D(texture.width, texture.height, TextureFormat.ARGB32, false);
 			textureDiff.filterMode = FilterMode.Point;
 			textureDiff.SetPixels(colorArray);
 			textureDiff.Apply(false);
@@ -58,8 +58,8 @@ public class WebcamTexture : MonoBehaviour {
 		pixelTouchedTarget = false;
 		p = Vector2.zero;
 		// point = Vector2.zero;
-		if (textureWebcam) {
-			Color[] colorPixelArray = textureWebcam.GetPixels();
+		if (texture) {
+			Color[] colorPixelArray = texture.GetPixels();
 			for (int i = 0; i < colorArray.Length; ++i) {
 
 				//Color currentColor = colorArray[i];
@@ -79,8 +79,8 @@ public class WebcamTexture : MonoBehaviour {
 					lum = 1f;
 					++diffCount;
 
-					p.x = (i % textureWebcam.width) / (float)textureWebcam.width;
-					p.y = Mathf.Floor(i / textureWebcam.width) / (float)textureWebcam.height;
+					p.x = (i % texture.width) / (float)texture.width;
+					p.y = Mathf.Floor(i / texture.width) / (float)texture.height;
 
 					// point += p;
 

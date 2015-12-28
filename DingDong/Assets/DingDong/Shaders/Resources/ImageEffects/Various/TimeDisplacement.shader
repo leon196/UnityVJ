@@ -30,8 +30,7 @@ Shader "Hidden/TimeDisplacement" {
 			
 			sampler2D _MainTex;
 			sampler2D _TimeTexture;
-			sampler2D _DifferenceTexture;
-			sampler2D _ParticleTexture;
+			sampler2D _SlitScanTexture;
 			float _ReaktorOutput;
 			float _FadeOutRatio;
 

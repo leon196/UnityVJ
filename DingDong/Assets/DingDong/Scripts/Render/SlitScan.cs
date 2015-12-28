@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class TimeTexture : MonoBehaviour
+public class SlitScan : MonoBehaviour
 {
 	WebcamManager webcam;
 	Texture2D texture;
@@ -18,7 +18,7 @@ public class TimeTexture : MonoBehaviour
 		width = webcam.texture.width;
 		height = webcam.texture.height;
 		texture = new Texture2D(width, height);
-		segments = height;
+		segments = (int)Screen.height / 2;
 		colorList = new Color[segments][];
 		for (int i = 0; i < segments; ++i) {
 			Color[] color = new Color[width * height];
@@ -29,7 +29,7 @@ public class TimeTexture : MonoBehaviour
 		}
 		texture.SetPixels(colorList[0]);
 		texture.Apply(false);
-		Shader.SetGlobalTexture("_TimeTexture", texture);
+		Shader.SetGlobalTexture("_SlitScanTexture", texture);
 	}
 
 	void Update ()
@@ -44,7 +44,9 @@ public class TimeTexture : MonoBehaviour
 			colorList[0] = webcamColors;
 			for (int c = 0; c < webcamColors.Length; ++c) {
 				int i = (int)Mathf.Floor((c / (float)webcamColors.Length) * segments);
-				newColors[c] = colorList[i][c];
+				//int i = (int)Mathf.Floor(((webcamColors.Length - c - 1) / (float)webcamColors.Length) * segments);
+				// int nextIndex = (int)Mathf.Clamp(i + 1, 0, segments - 1);
+				newColors[c] = colorList[i][c];//Color.Lerp(colorList[i][c], colorList[nextIndex][c], 0.5f);
 			}
 
 			texture.SetPixels(newColors);
