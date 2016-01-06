@@ -42,6 +42,7 @@
 			sampler2D _MainTex;
 			float _OhoSlider1;
 			float _OhoSlider2;
+			float _KaleidoCount;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
@@ -50,7 +51,7 @@
 
 				float2 center = uv - float2(0.5, 0.5);
 				center.x *= _ScreenParams.x / _ScreenParams.y;
-				float angle = (atan2(center.y, center.x) / PI) * 4 * (1 + _OhoSlider1 * 4);
+				float angle = (atan2(center.y, center.x) / PI) * _KaleidoCount;
 				float dist = length(center) * 4 * (1 + _OhoSlider2 * 4) - t;
 				uv.x = kaleido(angle, 0);
 				uv.y = kaleido(dist, 0);
