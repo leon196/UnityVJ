@@ -1,0 +1,12 @@
+﻿#pragma kernel computeNormaliseFronts
+
+RWStructuredBuffer<float3> weatherGridBuffer;
+RWStructuredBuffer<float3> weatherTamponBuffer;
+ 
+[numthreads(64,1,1)]
+ 
+void computeNormaliseFronts(int3 threadID : SV_GroupThreadID, int3 groupID : SV_GroupID, int3 dispatchID : SV_DispatchThreadID)
+{
+	weatherGridBuffer[dispatchID.x].x = weatherTamponBuffer[dispatchID.x].x;
+	weatherTamponBuffer[dispatchID.x].x = 0;
+}
