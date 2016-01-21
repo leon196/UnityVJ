@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Webcam"
+﻿Shader "Unlit/WebcamUV"
 {
 	Properties
 	{

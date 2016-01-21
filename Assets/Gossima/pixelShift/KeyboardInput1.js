@@ -3,13 +3,6 @@
 var distortEffect : distortEffect;
 
 function Update () {
-
-	if (Input.GetKeyDown ("a"))
-		Application.LoadLevel("circularize");
-	if (Input.GetKeyDown ("b"))
-		Application.LoadLevel("kaliedoscope_01");
-	if (Input.GetKeyDown ("c"))
-		Application.LoadLevel("PixelShift");
 		
 	//if (Input.GetKeyDown ("d"))
 	//	Application.LoadLevel(3);

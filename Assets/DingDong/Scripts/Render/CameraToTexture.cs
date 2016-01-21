@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CameraToTexture : MonoBehaviour
 {
+	public string textureName = "_CameraTexture";
 	RenderTexture buffer;
 	
 	void Start ()
@@ -11,6 +12,6 @@ public class CameraToTexture : MonoBehaviour
 		buffer.antiAliasing = 2;
 		buffer.Create();
 		GetComponent<Camera>().targetTexture = buffer;
-		Shader.SetGlobalTexture("_CameraTexture", buffer);
+		Shader.SetGlobalTexture(textureName, buffer);
 	}
 }
