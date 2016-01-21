@@ -15,11 +15,15 @@ public class Controller : MonoBehaviour {
 
 	// Kaleido 3D
 	Kaleido3DManager kaleido3DManager;
+	Wireframe wireframe;
 
-	void Start () {
+	void Start () 
+	{
 #if !UNITY_EDITOR
 		Cursor.visible = false;
 #endif
+
+		// Filters attached on camera
 		filterArray = cameraEffect.GetComponents<Filter>();
 		for (int i = 0; i < filterArray.Length; ++i) {
 			Filter filter = filterArray[i];
@@ -28,9 +32,17 @@ public class Controller : MonoBehaviour {
 				break;
 			}
 		}
+
+		// Kaleido 2D
+		SelectKaleidoCount(1);
+
+		// Kaleido 3D
 		kaleido3DManager = GameObject.FindObjectOfType<Kaleido3DManager>();
 		kaleido3DManager.transform.parent.gameObject.SetActive(false);
-		SelectKaleidoCount(1);
+		
+		// Wireframe
+		wireframe = GameObject.FindObjectOfType<Wireframe>();
+		wireframe.transform.parent.gameObject.SetActive(false);
 	}
 
 	void Update () 
@@ -44,6 +56,8 @@ public class Controller : MonoBehaviour {
 			SelectFilter(typeof(Kaleido3DFilter));
 		} else if (Input.GetKeyDown(KeyCode.D)) {
 			SelectFilter(typeof(Splashes));
+		} else if (Input.GetKeyDown(KeyCode.E)) {
+			SelectFilter(typeof(WireframeFilter));
 		}
 
 		// KALEIDO 2D
@@ -99,6 +113,25 @@ public class Controller : MonoBehaviour {
 			}
 		} else if (kaleido3DManager.transform.parent.gameObject.activeInHierarchy) {
 			kaleido3DManager.transform.parent.gameObject.SetActive(false);
+		}
+
+		// Wireframe
+		if (currentFilterType == typeof(WireframeFilter)) {
+			if (wireframe.transform.parent.gameObject.activeInHierarchy == false) {
+				wireframe.transform.parent.gameObject.SetActive(true);
+			}
+			if (Input.GetKeyDown (KeyCode.KeypadPlus)){
+				if (wireframe.tesselate > 6)
+					wireframe.tesselate -= 4;  
+				wireframe.material.SetFloat("_EdgeLength", wireframe.tesselate);
+			}
+				
+			if (Input.GetKeyDown (KeyCode.KeypadMinus)){
+				wireframe.tesselate += 4;  
+				wireframe.material.SetFloat("_EdgeLength", wireframe.tesselate);
+			}
+		} else if (wireframe.transform.parent.gameObject.activeInHierarchy) {
+			wireframe.transform.parent.gameObject.SetActive(false);
 		}
 	}
 
