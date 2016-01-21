@@ -5,8 +5,9 @@ using System.Collections;
 public class Controller : MonoBehaviour {
 
 	public Camera cameraEffect;
+	public TextMesh textDebug;
 	
-	Type currentFilterType = typeof(ComplexDividedByOne);
+	Type currentFilterType = typeof(Fractal);
 	int currentFilter = 0;
 	Filter[] filterArray;
 	
@@ -47,9 +48,12 @@ public class Controller : MonoBehaviour {
 
 	void Update () 
 	{
+		Shader.SetGlobalVector("_Mouse", new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+		textDebug.text = Input.mousePosition.x / Screen.width + "\n" + Input.mousePosition.y / Screen.height;
+
 		// Switch effect
 		if (Input.GetKeyDown(KeyCode.A)) {
-			SelectFilter(typeof(ComplexDividedByOne));
+			SelectFilter(typeof(Fractal));
 		} else if (Input.GetKeyDown(KeyCode.B)) {
 			SelectFilter(typeof(Kaleido));
 		} else if (Input.GetKeyDown(KeyCode.C)) {
