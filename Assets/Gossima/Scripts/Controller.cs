@@ -5,16 +5,16 @@ using System.Collections;
 public class Controller : MonoBehaviour {
 
 	public Camera cameraEffect;
-	public TextMesh textDebug;
+	// public TextMesh textDebug;
 	
 	Type currentFilterType = typeof(Fractal);
 	int currentFilter = 0;
 	Filter[] filterArray;
+	bool autoNextMode = false;
+	float autoNextLastTime = 0f;
+	float autoNextDelay = 10f;
 	
-	// Kaleido 2D
-	int kaleidoCount = 1;
-
-	// Kaleido 3D
+	Kaleido kaleido;	
 	Kaleido3DManager kaleido3DManager;
 	Wireframe wireframe;
 	Planet planet;
@@ -37,29 +37,36 @@ public class Controller : MonoBehaviour {
 			}
 		}
 
-		// Kaleido 2D
-		SelectKaleidoCount(1);
-
-		// Kaleido 3D
+		kaleido = GameObject.FindObjectOfType<Kaleido>();
 		kaleido3DManager = GameObject.FindObjectOfType<Kaleido3DManager>();
-		kaleido3DManager.transform.parent.gameObject.SetActive(false);
-		
-		// Wireframe
 		wireframe = GameObject.FindObjectOfType<Wireframe>();
-		wireframe.transform.parent.gameObject.SetActive(false);
-
-		// Planet
 		planet = GameObject.FindObjectOfType<Planet>();
-		planet.transform.parent.gameObject.SetActive(false);
-
-		// Splashes
 		splashes = GameObject.FindObjectOfType<Splashes>();
+
+		kaleido3DManager.transform.parent.gameObject.SetActive(false);
+		planet.transform.parent.gameObject.SetActive(false);
+		wireframe.transform.parent.gameObject.SetActive(false);
 	}
 
 	void Update () 
 	{
-		Shader.SetGlobalVector("_Mouse", new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-		textDebug.text = Input.mousePosition.x / Screen.width + "\n" + Input.mousePosition.y / Screen.height;
+		// Shader.SetGlobalVector("_Mouse", new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+		// textDebug.text = Input.mousePosition.x / Screen.width + "\n" + Input.mousePosition.y / Screen.height;
+
+		if (Input.GetKeyDown(KeyCode.P)) {
+			autoNextMode = !autoNextMode;
+		}
+
+		if (autoNextMode) {
+			if (autoNextLastTime + autoNextDelay < Time.time) {
+				autoNextLastTime = Time.time;
+				NextFilter();
+			}
+		}
+
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			NextFilter();
+		}
 
 		// Switch effect
 		if (Input.GetKeyDown(KeyCode.A)) {
@@ -74,6 +81,8 @@ public class Controller : MonoBehaviour {
 			SelectFilter(typeof(WireframeFilter));
 		} else if (Input.GetKeyDown(KeyCode.F)) {
 			SelectFilter(typeof(PlanetFilter));
+		} else if (Input.GetKeyDown(KeyCode.G)) {
+			SelectFilter(typeof(SpaceOdyssey));
 		}
 
 		// SPLASHES
@@ -90,19 +99,17 @@ public class Controller : MonoBehaviour {
 
 		// KALEIDO 2D
 		if (currentFilterType == typeof(Kaleido)) {
-			if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
-				SelectKaleidoCount(Mathf.Clamp(kaleidoCount + 1, 1, 16));
-			} else if (Input.GetKeyDown(KeyCode.KeypadMinus)) {
-				SelectKaleidoCount(Mathf.Clamp(kaleidoCount - 1, 1, 16));
-			} else if (Input.GetKeyDown(KeyCode.Keypad1)) {	SelectKaleidoCount(1); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {	SelectKaleidoCount(2); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {	SelectKaleidoCount(3); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad4)) {	SelectKaleidoCount(4); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad5)) {	SelectKaleidoCount(5); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad6)) {	SelectKaleidoCount(6); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad7)) {	SelectKaleidoCount(7); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {	SelectKaleidoCount(8); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad9)) {	SelectKaleidoCount(9); }
+			if (Input.GetKey(KeyCode.KeypadPlus)) { kaleido.UpSpeed();
+			} else if (Input.GetKey(KeyCode.KeypadMinus)) { kaleido.DownSpeed();
+			} else if (Input.GetKeyDown(KeyCode.Keypad1)) {	kaleido.SetKaleidoCount(1); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {	kaleido.SetKaleidoCount(2); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {	kaleido.SetKaleidoCount(3); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad4)) {	kaleido.SetKaleidoCount(4); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad5)) {	kaleido.SetKaleidoCount(5); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad6)) {	kaleido.SetKaleidoCount(6); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad7)) {	kaleido.SetKaleidoCount(7); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {	kaleido.SetKaleidoCount(8); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad9)) {	kaleido.SetKaleidoCount(9); }
 		}
 
 		// KALEIDO 3D
@@ -177,11 +184,6 @@ public class Controller : MonoBehaviour {
 		currentFilterType = type;
 	}
 
-	void SelectKaleidoCount (int count) {
-		kaleidoCount = count;
-		UnityEngine.Shader.SetGlobalFloat("_KaleidoCount", (float)count);
-	}
-
 	void NextFilter () {
 		currentFilter = (currentFilter + 1) % filterArray.Length;
 		for (int i = 0; i < filterArray.Length; ++i) {
@@ -190,6 +192,7 @@ public class Controller : MonoBehaviour {
 				filter.enabled = false;
 			} else {
 				filter.enabled = true;
+				currentFilterType = filter.GetType();
 			}
 		}
 	}

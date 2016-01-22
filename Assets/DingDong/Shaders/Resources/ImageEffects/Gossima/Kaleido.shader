@@ -3,6 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_Speed ("Speed", Float) = 10
+		_KaleidoCount ("Kaleido Count", Float) = 2
 	}
 	SubShader
 	{
@@ -43,11 +45,12 @@
 			float _OhoSlider1;
 			float _OhoSlider2;
 			float _KaleidoCount;
+			float _Speed;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
 				float2 uv = i.uv;
-				float t = _Time * 10;
+				float t = _Time * _Speed;
 
 				float2 center = uv - float2(0.5, 0.5);
 				center.x *= _ScreenParams.x / _ScreenParams.y;
