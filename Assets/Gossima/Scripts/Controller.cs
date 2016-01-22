@@ -17,6 +17,8 @@ public class Controller : MonoBehaviour {
 	// Kaleido 3D
 	Kaleido3DManager kaleido3DManager;
 	Wireframe wireframe;
+	Planet planet;
+	Splashes splashes;
 
 	void Start () 
 	{
@@ -30,6 +32,7 @@ public class Controller : MonoBehaviour {
 			Filter filter = filterArray[i];
 			if (filter.enabled) {
 				currentFilter = i;
+				currentFilterType = filter.GetType();
 				break;
 			}
 		}
@@ -44,6 +47,13 @@ public class Controller : MonoBehaviour {
 		// Wireframe
 		wireframe = GameObject.FindObjectOfType<Wireframe>();
 		wireframe.transform.parent.gameObject.SetActive(false);
+
+		// Planet
+		planet = GameObject.FindObjectOfType<Planet>();
+		planet.transform.parent.gameObject.SetActive(false);
+
+		// Splashes
+		splashes = GameObject.FindObjectOfType<Splashes>();
 	}
 
 	void Update () 
@@ -62,6 +72,20 @@ public class Controller : MonoBehaviour {
 			SelectFilter(typeof(Splashes));
 		} else if (Input.GetKeyDown(KeyCode.E)) {
 			SelectFilter(typeof(WireframeFilter));
+		} else if (Input.GetKeyDown(KeyCode.F)) {
+			SelectFilter(typeof(PlanetFilter));
+		}
+
+		// SPLASHES
+		if (currentFilterType == typeof(Splashes)) {
+			if (Input.GetKey(KeyCode.KeypadPlus)) { splashes.UpSpeed();
+			} else if (Input.GetKey(KeyCode.KeypadMinus)) { splashes.DownSpeed(); 
+			} else if (Input.GetKey(KeyCode.Keypad4)) {	splashes.DownDirectionColorRatio(); 
+			} else if (Input.GetKey(KeyCode.Keypad6)) { splashes.UpDirectionColorRatio(); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad0)) {	splashes.SetSpeed(0f); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad1)) {	splashes.SetSpeed(0.33f); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {	splashes.SetSpeed(0.66f); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {	splashes.SetSpeed(0.99f); }
 		}
 
 		// KALEIDO 2D
@@ -70,25 +94,15 @@ public class Controller : MonoBehaviour {
 				SelectKaleidoCount(Mathf.Clamp(kaleidoCount + 1, 1, 16));
 			} else if (Input.GetKeyDown(KeyCode.KeypadMinus)) {
 				SelectKaleidoCount(Mathf.Clamp(kaleidoCount - 1, 1, 16));
-			} else if (Input.GetKeyDown(KeyCode.Keypad1)) {
-				SelectKaleidoCount(1);
-			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {
-				SelectKaleidoCount(2);
-			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {
-				SelectKaleidoCount(3);
-			} else if (Input.GetKeyDown(KeyCode.Keypad4)) {
-				SelectKaleidoCount(4);
-			} else if (Input.GetKeyDown(KeyCode.Keypad5)) {
-				SelectKaleidoCount(5);
-			} else if (Input.GetKeyDown(KeyCode.Keypad6)) {
-				SelectKaleidoCount(6);
-			} else if (Input.GetKeyDown(KeyCode.Keypad7)) {
-				SelectKaleidoCount(7);
-			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {
-				SelectKaleidoCount(8);
-			} else if (Input.GetKeyDown(KeyCode.Keypad9)) {
-				SelectKaleidoCount(9);
-			}
+			} else if (Input.GetKeyDown(KeyCode.Keypad1)) {	SelectKaleidoCount(1); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {	SelectKaleidoCount(2); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {	SelectKaleidoCount(3); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad4)) {	SelectKaleidoCount(4); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad5)) {	SelectKaleidoCount(5); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad6)) {	SelectKaleidoCount(6); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad7)) {	SelectKaleidoCount(7); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {	SelectKaleidoCount(8); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad9)) {	SelectKaleidoCount(9); }
 		}
 
 		// KALEIDO 3D
@@ -104,22 +118,16 @@ public class Controller : MonoBehaviour {
 					kaleido3DManager.kaliedoscopeBlades--;
 					kaleido3DManager.ResetKaliedoscope();
 				}
-			} else if (Input.GetKeyDown (KeyCode.Keypad1)) {
-				kaleido3DManager.complexity = 3;
-			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {
-				kaleido3DManager.complexity = 8;
-			} else if (Input.GetKeyDown (KeyCode.Keypad3)) {
-				kaleido3DManager.complexity = 10;
-			} else if (Input.GetKeyDown (KeyCode.Keypad4)) {
-				kaleido3DManager.complexity = 12;
-			} else if (Input.GetKeyDown (KeyCode.Keypad5)){
-				kaleido3DManager.complexity = 15;
-			}
+			} else if (Input.GetKeyDown (KeyCode.Keypad1)) { kaleido3DManager.complexity = 3;
+			} else if (Input.GetKeyDown (KeyCode.Keypad2)) { kaleido3DManager.complexity = 8;
+			} else if (Input.GetKeyDown (KeyCode.Keypad3)) { kaleido3DManager.complexity = 10;
+			} else if (Input.GetKeyDown (KeyCode.Keypad4)) { kaleido3DManager.complexity = 12;
+			} else if (Input.GetKeyDown (KeyCode.Keypad5)) { kaleido3DManager.complexity = 15; }
 		} else if (kaleido3DManager.transform.parent.gameObject.activeInHierarchy) {
 			kaleido3DManager.transform.parent.gameObject.SetActive(false);
 		}
 
-		// Wireframe
+		// WIREFRAME
 		if (currentFilterType == typeof(WireframeFilter)) {
 			if (wireframe.transform.parent.gameObject.activeInHierarchy == false) {
 				wireframe.transform.parent.gameObject.SetActive(true);
@@ -129,13 +137,24 @@ public class Controller : MonoBehaviour {
 					wireframe.tesselate -= 4;  
 				wireframe.material.SetFloat("_EdgeLength", wireframe.tesselate);
 			}
-				
 			if (Input.GetKeyDown (KeyCode.KeypadMinus)){
 				wireframe.tesselate += 4;  
 				wireframe.material.SetFloat("_EdgeLength", wireframe.tesselate);
 			}
 		} else if (wireframe.transform.parent.gameObject.activeInHierarchy) {
 			wireframe.transform.parent.gameObject.SetActive(false);
+		}
+
+		// PLANET
+		if (currentFilterType == typeof(PlanetFilter)) {
+			if (planet.transform.parent.gameObject.activeInHierarchy == false) {
+				planet.transform.parent.gameObject.SetActive(true);
+			}
+			if (Input.GetKeyDown(KeyCode.KeypadPlus)) { planet.IncrementUVScale(); 
+			} else if (Input.GetKeyDown(KeyCode.KeypadMinus)) { planet.DecrementUVScale(); }
+
+		} else if (planet.transform.parent.gameObject.activeInHierarchy) {
+			planet.transform.parent.gameObject.SetActive(false);
 		}
 	}
 

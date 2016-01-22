@@ -1,8 +1,7 @@
 ﻿Shader "DingDong/Vertex/Planet" {
   Properties {
-		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("Texture (RGB)", 2D) = "white" {}
-      _Size ("Size", Range(0, 1.0)) = 0.01
+      _MainTex ("Texture (RGB)", 2D) = "white" {}
+		  _UVScale ("UV Scale", Range(1, 12)) = 1
     }
     SubShader {
       Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
@@ -37,16 +36,15 @@
 
         sampler2D _MainTex;
         sampler2D _TextureFFT;
-        sampler2D _VideoTexture;
+        sampler2D _WebcamTexture;
         float4 _MainTex_ST;
-        fixed4 _Color;
-        float _Size;
         float _GlobalFFT;
         float _GlobalFFTTotal;
+        float _UVScale;
 
         float2 getTextureCoordinates (float2 uv)
         {
-        	uv *= 6.0;
+        	uv *= _UVScale;
         	uv.x = kaleido(uv.x, 0);
         	uv.y = kaleido(uv.y, 0);
         	return uv;
@@ -57,7 +55,7 @@
           GS_INPUT o = (GS_INPUT)0;
           float3 position = v.vertex.xyz;//mul(_Object2World, v.vertex).xyz;
 
-          float lum = Luminance(tex2Dlod(_VideoTexture, float4(getTextureCoordinates(v.texcoord.xy), 0, 0)));
+          float lum = Luminance(tex2Dlod(_WebcamTexture, float4(getTextureCoordinates(v.texcoord.xy), 0, 0)));
 
           position += normalize(position) * lum;
 
@@ -70,15 +68,7 @@
 
         half4 frag (GS_INPUT i) : COLOR
         {
-        	float2 uv = i.uv;
-
-        	uv *= 6.0;
-
-        	uv.x = kaleido(uv.x, 0);
-        	uv.y = kaleido(uv.y, 0);
-
-          half4 color = tex2D(_VideoTexture, uv);
-          return color;
+          return tex2D(_WebcamTexture, getTextureCoordinates(i.uv));
         }
         ENDCG
       }
