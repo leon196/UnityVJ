@@ -1,0 +1,144 @@
+fileFormatVersion: 2
+guid: 9bc1df5020ef1d747ae1c5b88aab2b5d
+timeCreated: 1453563765
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: DrawCall_125
+    100002: DrawCall_125_MeshPart0
+    100004: DrawCall_125_MeshPart1
+    100006: DrawCall_125_MeshPart2
+    100008: DrawCall_125_MeshPart3
+    100010: DrawCall_125_MeshPart4
+    100012: DrawCall_292
+    100014: DrawCall_292_MeshPart0
+    100016: DrawCall_292_MeshPart1
+    100018: DrawCall_292_MeshPart2
+    100020: DrawCall_292_MeshPart3
+    100022: DrawCall_3
+    100024: DrawCall_4
+    100026: DrawCall_5
+    100028: DrawCall_6
+    100030: //RootNode
+    400000: DrawCall_125
+    400002: DrawCall_125_MeshPart0
+    400004: DrawCall_125_MeshPart1
+    400006: DrawCall_125_MeshPart2
+    400008: DrawCall_125_MeshPart3
+    400010: DrawCall_125_MeshPart4
+    400012: DrawCall_292
+    400014: DrawCall_292_MeshPart0
+    400016: DrawCall_292_MeshPart1
+    400018: DrawCall_292_MeshPart2
+    400020: DrawCall_292_MeshPart3
+    400022: DrawCall_3
+    400024: DrawCall_4
+    400026: DrawCall_5
+    400028: DrawCall_6
+    400030: //RootNode
+    2300000: DrawCall_125_MeshPart0
+    2300002: DrawCall_125_MeshPart1
+    2300004: DrawCall_125_MeshPart2
+    2300006: DrawCall_125_MeshPart3
+    2300008: DrawCall_125_MeshPart4
+    2300010: DrawCall_292_MeshPart0
+    2300012: DrawCall_292_MeshPart1
+    2300014: DrawCall_292_MeshPart2
+    2300016: DrawCall_292_MeshPart3
+    2300018: DrawCall_3
+    2300020: DrawCall_4
+    2300022: DrawCall_5
+    2300024: DrawCall_6
+    3300000: DrawCall_125_MeshPart0
+    3300002: DrawCall_125_MeshPart1
+    3300004: DrawCall_125_MeshPart2
+    3300006: DrawCall_125_MeshPart3
+    3300008: DrawCall_125_MeshPart4
+    3300010: DrawCall_292_MeshPart0
+    3300012: DrawCall_292_MeshPart1
+    3300014: DrawCall_292_MeshPart2
+    3300016: DrawCall_292_MeshPart3
+    3300018: DrawCall_3
+    3300020: DrawCall_4
+    3300022: DrawCall_5
+    3300024: DrawCall_6
+    4300000: DrawCall_292_MeshPart0
+    4300002: DrawCall_292_MeshPart1
+    4300004: DrawCall_292_MeshPart2
+    4300006: DrawCall_292_MeshPart3
+    4300008: DrawCall_6
+    4300010: DrawCall_125_MeshPart0
+    4300012: DrawCall_125_MeshPart1
+    4300014: DrawCall_125_MeshPart2
+    4300016: DrawCall_125_MeshPart3
+    4300018: DrawCall_125_MeshPart4
+    4300020: DrawCall_3
+    4300022: DrawCall_5
+    4300024: DrawCall_4
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

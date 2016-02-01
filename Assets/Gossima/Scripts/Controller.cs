@@ -19,6 +19,9 @@ public class Controller : MonoBehaviour {
 	Wireframe wireframe;
 	Planet planet;
 	Splashes splashes;
+	Fractal fractal;
+	WarbandManager warband;
+	GlitchyCam glitchyCam;
 
 	void Start () 
 	{
@@ -42,10 +45,14 @@ public class Controller : MonoBehaviour {
 		wireframe = GameObject.FindObjectOfType<Wireframe>();
 		planet = GameObject.FindObjectOfType<Planet>();
 		splashes = GameObject.FindObjectOfType<Splashes>();
+		fractal = GameObject.FindObjectOfType<Fractal>();
+		warband = GameObject.FindObjectOfType<WarbandManager>();
+		glitchyCam = GameObject.FindObjectOfType<GlitchyCam>();
 
 		kaleido3DManager.transform.parent.gameObject.SetActive(false);
 		planet.transform.parent.gameObject.SetActive(false);
 		wireframe.transform.parent.gameObject.SetActive(false);
+		// warband.transform.parent.gameObject.SetActive(false);
 	}
 
 	void Update () 
@@ -83,6 +90,19 @@ public class Controller : MonoBehaviour {
 			SelectFilter(typeof(PlanetFilter));
 		} else if (Input.GetKeyDown(KeyCode.G)) {
 			SelectFilter(typeof(SpaceOdyssey));
+		} else if (Input.GetKeyDown(KeyCode.H)) {
+			SelectFilter(typeof(WarbandFilter));
+		} else if (Input.GetKeyDown(KeyCode.I)) {
+			SelectFilter(typeof(GlitchyCam));
+		}
+
+		// FRACTAL
+		if (currentFilterType == typeof(Fractal)) {
+			if (Input.GetKeyDown(KeyCode.Keypad0)) { fractal.ToggleFractalMode();
+			} else if (Input.GetKey(KeyCode.KeypadPlus)) { fractal.UpZoom(); 
+			} else if (Input.GetKey(KeyCode.KeypadMinus)) { fractal.DownZoom(); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad4)) { fractal.ToggleMoveX(); 
+			} else if (Input.GetKeyDown(KeyCode.Keypad6)) { fractal.ToggleMoveY(); }
 		}
 
 		// SPLASHES
@@ -162,6 +182,24 @@ public class Controller : MonoBehaviour {
 
 		} else if (planet.transform.parent.gameObject.activeInHierarchy) {
 			planet.transform.parent.gameObject.SetActive(false);
+		}
+
+		// WARBAND
+		// if (currentFilterType == typeof(WarbandFilter)) {
+		// 	if (warband.transform.parent.gameObject.activeInHierarchy == false) {
+		// 		warband.transform.parent.gameObject.SetActive(true);
+		// 	}
+		// 	if (Input.GetKeyDown(KeyCode.Keypad0)) {
+		// 		warband.RumbleCamera();
+		// 	}
+		// } else if (warband.transform.parent.gameObject.activeInHierarchy) {
+			// warband.transform.parent.gameObject.SetActive(false);
+		// }
+
+		// GlitchyCam
+		if (currentFilterType == typeof(GlitchyCam)) {
+			if (Input.GetKeyDown (KeyCode.KeypadPlus)) { glitchyCam.intensity += 0.2f; 
+			} else if (Input.GetKeyDown (KeyCode.KeypadMinus)) { glitchyCam.intensity -= 0.2f; }
 		}
 	}
 

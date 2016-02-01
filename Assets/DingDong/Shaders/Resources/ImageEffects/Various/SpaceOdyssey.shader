@@ -3,6 +3,7 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_Horizontal ("Horizontal", Float) = 1
 	}
 	SubShader
 	{
@@ -40,6 +41,7 @@
 			}
 			
 			sampler2D _MainTex;
+			float _Horizontal;
 
 			fixed4 frag (v2f i) : SV_Target
 			{

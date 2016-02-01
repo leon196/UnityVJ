@@ -24,7 +24,6 @@ public class WebcamManager : MonoBehaviour {
 	void Awake () {
 			
 		Shader.SetGlobalFloat("_FadeOutRatio", differenceFadeOutRatio);
-
 		if (WebCamTexture.devices.Length > 0) {
 
 			// Setup webcam texture
@@ -53,6 +52,7 @@ public class WebcamManager : MonoBehaviour {
 		}
 	}
 	
+	/*
 	void FixedUpdate () {
 		int diffCount = 0;
 		pixelTouchedTarget = false;
@@ -106,4 +106,5 @@ public class WebcamManager : MonoBehaviour {
 			}
 		}
 	}
+	*/
 }

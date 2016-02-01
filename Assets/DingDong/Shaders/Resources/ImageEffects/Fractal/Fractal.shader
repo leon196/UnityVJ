@@ -1,6 +1,10 @@
 Shader "Hidden/Fractal" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
+    _FractalMode ("Mode", Float) = 0
+    _Zoom ("Zoom", Float) = 1
+    _MoveX ("Move X", Float) = 0
+    _MoveY ("Move Y", Float) = 0
 	}
 	SubShader {
 		Pass {
@@ -21,6 +25,10 @@ Shader "Hidden/Fractal" {
       float _GlobalFFT;
       float _GlobalFFTTotal;
       float2 _Mouse;
+      float _FractalMode;
+      float _Zoom;
+      float _MoveX;
+      float _MoveY;
 
       // Thanks to David Bau
       // http://davidbau.com/archives/2013/02/10/conformal_map_viewer.html
@@ -80,7 +88,7 @@ Shader "Hidden/Fractal" {
       {
         float2 uv = i.uv * 2.0 - 1.0;
         uv.x *= _ScreenParams.x / _ScreenParams.y;
-        uv *= 5.;
+        uv *= _Zoom;
         float t = _Time * 10.0;
 
         float angle = atan2(uv.y, uv.x);// + _Time * 2.0;
@@ -90,10 +98,10 @@ Shader "Hidden/Fractal" {
         uv = complex_div(1.0, uv);
 
 
-        uv.x = kaleido(uv.x, 0.);
-        uv.y = kaleido(uv.y, t);
+        uv.x = kaleido(uv.x, lerp(0., t, _MoveX));
+        uv.y = kaleido(uv.y, lerp(0., t, _MoveY));
 
-        float4 color = tex2D(_MainTex, uv);
+        float4 color = lerp(tex2D(_MainTex, uv), Julia(i.uv), _FractalMode);
 
         return color;
       }

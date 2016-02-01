@@ -57,7 +57,7 @@
 
           float lum = Luminance(tex2Dlod(_WebcamTexture, float4(getTextureCoordinates(v.texcoord.xy), 0, 0)));
 
-          position += normalize(position) * lum;
+          position += normalize(position) * (lum + _GlobalFFT);
 
           o.pos =  mul(UNITY_MATRIX_MVP, float4(position, 1.0));
           o.normal = float4(v.normal, 1.0);

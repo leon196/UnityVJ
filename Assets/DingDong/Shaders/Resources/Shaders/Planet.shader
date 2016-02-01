@@ -36,6 +36,7 @@
 			sampler2D _SamplerRenderTarget;
 	    	float4 _SamplerVideo_ST; 
 
+			float _GlobalFFT;
 			float _TimeElapsed;
 	    	float _RoundEffect;
 	    	float _RoundVideo;
