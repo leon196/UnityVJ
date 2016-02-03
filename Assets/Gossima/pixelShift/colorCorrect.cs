@@ -2,30 +2,30 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class colorCorrect : MonoBehaviour {
-
-	public Material material;
+public class colorCorrect : MonoBehaviour 
+{
+	protected Material material;
 
 	public float black = 0.0f;
-	public float white = 1.0f;
 	public float gamma = 1.0f;
 	public float gain = 1.0f;
-	public float saturation = 1.0f;
 	
-	
-	void Update() {
-		
+	// Creates a private material used to the effect
+	void Awake ()
+	{
+		material = new Material( Shader.Find("colorCorrect") );
+	}
+
+	void Update() {		
 		material.SetFloat("_black", black);
-		material.SetFloat("_white", white);
 		material.SetFloat("_gain", gain);
-		material.SetFloat("_gamma", gamma);
-		material.SetFloat("_saturation", saturation);
-		
+		material.SetFloat("_gamma", gamma);	
 	}
 	
 	// Postprocess the image
-	void OnRenderImage(RenderTexture source, RenderTexture destination)
+	void OnRenderImage (RenderTexture source, RenderTexture destination)
 	{
-		Graphics.Blit(source, destination, material);
+		Graphics.Blit (source, destination, material);
 	}
 }
+

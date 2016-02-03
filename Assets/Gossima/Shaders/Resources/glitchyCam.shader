@@ -15,6 +15,7 @@
 			#include "UnityCG.cginc"
 		
 			uniform sampler2D _MainTex;
+			sampler2D _WebcamTexture;
 			//uniform sampler2D _MaskTex;
 			
 			//fixed _maskBlend;
@@ -60,7 +61,7 @@
 
 				i.uv += float2(i.uv.y * d * _intensity * 0.5,0 ) ;
 			 
-				float4 c = tex2D(_MainTex, i.uv);
+				float4 c = tex2D(_WebcamTexture, i.uv);
 
 				float2 wOffset = float2(1/_ScreenParams.y,0);
 
@@ -74,9 +75,9 @@
 
 				float4 blurred = 0;
 				for (int j=-5; j<5; j++){
-					 blurred.r += tex2D(_MainTex, i.uv + float2(j/_ScreenParams.x,0) );
-					 blurred.g += tex2D(_MainTex, i.uv + float2(j/_ScreenParams.x,0) + d*4*wOffset);
-					 blurred.b += tex2D(_MainTex, i.uv + float2(j/_ScreenParams.x,0) + d*8*wOffset);
+					 blurred.r += tex2D(_WebcamTexture, i.uv + float2(j/_ScreenParams.x,0) );
+					 blurred.g += tex2D(_WebcamTexture, i.uv + float2(j/_ScreenParams.x,0) + d*4*wOffset);
+					 blurred.b += tex2D(_WebcamTexture, i.uv + float2(j/_ScreenParams.x,0) + d*8*wOffset);
 				}
 				blurred/= +10;
 				
@@ -88,7 +89,7 @@
 				c = lerp(c,cac,ca);
 
 
-				//c += tex2D(_MainTex, i.uv);
+				//c += tex2D(_WebcamTexture, i.uv);
 
 
 
@@ -98,19 +99,18 @@
 
 				d *= 5;
 							
-				//c.g = tex2D(_MainTex, i.uv+float2(d/_ScreenParams.y,0));
-				//c.b = tex2D(_MainTex, i.uv+float2(d*2/_ScreenParams.y,0));
+				//c.g = tex2D(_WebcamTexture, i.uv+float2(d/_ScreenParams.y,0));
+				//c.b = tex2D(_WebcamTexture, i.uv+float2(d*2/_ScreenParams.y,0));
 
-				float wtf = tex2D(_MainTex, pow(i.uv,d));
+				float wtf = tex2D(_WebcamTexture, pow(i.uv,d));
 
-				c = lerp(c,tex2D(_MainTex, i.uv+float2(_ScreenParams.z,0)),0.1*mask);
+				c = lerp(c,tex2D(_WebcamTexture, i.uv+float2(_ScreenParams.z,0)),0.1*mask);
 
 				c += _intensity * wtf * mask / 5;
 				
 				c *= _gain;
 
 				return c * 1-lines*30;	
-
 						
 					
 			}
