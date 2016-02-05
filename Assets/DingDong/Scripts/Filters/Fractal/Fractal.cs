@@ -11,6 +11,15 @@ public class Fractal : Filter
 		material = new Material( Shader.Find("Hidden/Fractal") );
 	}
 
+	public void Reset ()
+	{
+		currentZoom = 1f;
+		material.SetFloat("_Zoom", currentZoom);
+		material.SetFloat("_FractalMode", 0f);
+		material.SetFloat("_MoveX", 0f);
+		material.SetFloat("_MoveY", 0f);
+	}
+
 	public void ToggleFractalMode ()
 	{
 		material.SetFloat("_FractalMode", material.GetFloat("_FractalMode") == 0f ? 1f : 0f);

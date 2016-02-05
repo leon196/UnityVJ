@@ -59,7 +59,7 @@ public class OSCReceiverC : MonoBehaviour {
     #region Methods
     // called every time Unity receives a message
     public void MessageHandler(OscMessage message) {
-        string msgString = Osc.OscMessageToString(message);
+        // string msgString = Osc.OscMessageToString(message);
         //MainDebug.WriteLine(msgString);     // writing out the message to see if everything works correctly
 		//Debug.Log (msgString);
 

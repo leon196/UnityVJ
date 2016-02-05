@@ -21,4 +21,8 @@ public class Filter : MonoBehaviour
 	public virtual void Rumble ()
 	{
 	}
+
+	public virtual void Reset ()
+	{
+	}
 }

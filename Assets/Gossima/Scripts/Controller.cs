@@ -102,7 +102,8 @@ public class Controller : MonoBehaviour {
 			} else if (Input.GetKey(KeyCode.KeypadPlus)) { fractal.UpZoom(); 
 			} else if (Input.GetKey(KeyCode.KeypadMinus)) { fractal.DownZoom(); 
 			} else if (Input.GetKeyDown(KeyCode.Keypad4)) { fractal.ToggleMoveX(); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad6)) { fractal.ToggleMoveY(); }
+			} else if (Input.GetKeyDown(KeyCode.Keypad6)) { fractal.ToggleMoveY(); 
+			} else if (Input.GetKeyDown(KeyCode.R)) { fractal.Reset(); }
 		}
 
 		// SPLASHES
@@ -114,7 +115,8 @@ public class Controller : MonoBehaviour {
 			} else if (Input.GetKeyDown(KeyCode.Keypad0)) {	splashes.SetSpeed(0f); 
 			} else if (Input.GetKeyDown(KeyCode.Keypad1)) {	splashes.SetSpeed(0.33f); 
 			} else if (Input.GetKeyDown(KeyCode.Keypad2)) {	splashes.SetSpeed(0.66f); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {	splashes.SetSpeed(0.99f); }
+			} else if (Input.GetKeyDown(KeyCode.Keypad3)) {	splashes.SetSpeed(0.99f); 
+			} else if (Input.GetKeyDown(KeyCode.R)) {	splashes.Reset(); }
 		}
 
 		// KALEIDO 2D
@@ -129,7 +131,8 @@ public class Controller : MonoBehaviour {
 			} else if (Input.GetKeyDown(KeyCode.Keypad6)) {	kaleido.SetKaleidoCount(6); 
 			} else if (Input.GetKeyDown(KeyCode.Keypad7)) {	kaleido.SetKaleidoCount(7); 
 			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {	kaleido.SetKaleidoCount(8); 
-			} else if (Input.GetKeyDown(KeyCode.Keypad9)) {	kaleido.SetKaleidoCount(9); }
+			} else if (Input.GetKeyDown(KeyCode.Keypad9)) {	kaleido.SetKaleidoCount(9); 
+			} else if (Input.GetKeyDown(KeyCode.R)) { kaleido.Reset(); }
 		}
 
 		// KALEIDO 3D
@@ -149,7 +152,9 @@ public class Controller : MonoBehaviour {
 			} else if (Input.GetKeyDown (KeyCode.Keypad2)) { kaleido3DManager.complexity = 8;
 			} else if (Input.GetKeyDown (KeyCode.Keypad3)) { kaleido3DManager.complexity = 10;
 			} else if (Input.GetKeyDown (KeyCode.Keypad4)) { kaleido3DManager.complexity = 12;
-			} else if (Input.GetKeyDown (KeyCode.Keypad5)) { kaleido3DManager.complexity = 15; }
+			} else if (Input.GetKeyDown (KeyCode.Keypad5)) { kaleido3DManager.complexity = 15;
+			} else if (Input.GetKeyDown(KeyCode.R)) { kaleido3DManager.Reset(); }
+
 		} else if (kaleido3DManager.transform.parent.gameObject.activeInHierarchy) {
 			kaleido3DManager.transform.parent.gameObject.SetActive(false);
 		}
@@ -178,28 +183,29 @@ public class Controller : MonoBehaviour {
 				planet.transform.parent.gameObject.SetActive(true);
 			}
 			if (Input.GetKeyDown(KeyCode.KeypadPlus)) { planet.IncrementUVScale(); 
-			} else if (Input.GetKeyDown(KeyCode.KeypadMinus)) { planet.DecrementUVScale(); }
+			} else if (Input.GetKeyDown(KeyCode.KeypadMinus)) { planet.DecrementUVScale();
+			} else if (Input.GetKeyDown(KeyCode.R)) { planet.Reset(); }
 
 		} else if (planet.transform.parent.gameObject.activeInHierarchy) {
 			planet.transform.parent.gameObject.SetActive(false);
 		}
 
 		// WARBAND
-		// if (currentFilterType == typeof(WarbandFilter)) {
-		// 	if (warband.transform.parent.gameObject.activeInHierarchy == false) {
-		// 		warband.transform.parent.gameObject.SetActive(true);
-		// 	}
-		// 	if (Input.GetKeyDown(KeyCode.Keypad0)) {
-		// 		warband.RumbleCamera();
-		// 	}
-		// } else if (warband.transform.parent.gameObject.activeInHierarchy) {
-			// warband.transform.parent.gameObject.SetActive(false);
-		// }
+		if (currentFilterType == typeof(WarbandFilter)) {
+			if (warband.transform.parent.gameObject.activeInHierarchy == false) {
+				warband.transform.parent.gameObject.SetActive(true);
+			}
+			if (Input.GetKeyDown(KeyCode.Keypad0)) { warband.RumbleCamera(); }
+
+		} else if (warband.transform.parent.gameObject.activeInHierarchy) {
+			warband.transform.parent.gameObject.SetActive(false);
+		}
 
 		// GlitchyCam
 		if (currentFilterType == typeof(GlitchyCam)) {
 			if (Input.GetKeyDown (KeyCode.KeypadPlus)) { glitchyCam.intensity += 0.2f; 
-			} else if (Input.GetKeyDown (KeyCode.KeypadMinus)) { glitchyCam.intensity -= 0.2f; }
+			} else if (Input.GetKeyDown (KeyCode.KeypadMinus)) { glitchyCam.intensity -= 0.2f; 
+			} else if (Input.GetKeyDown(KeyCode.R)) { glitchyCam.Reset(); }
 		}
 	}
 

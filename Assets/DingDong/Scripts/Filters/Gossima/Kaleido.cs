@@ -14,6 +14,14 @@ public class Kaleido : Filter
 		currentKaleidoCount = material.GetFloat("_KaleidoCount");
 	}
 
+	public void Reset ()
+	{
+		currentSpeed = 10f;
+		currentKaleidoCount = 2f;
+		material.SetFloat("_Speed", currentSpeed);
+		material.SetFloat("_KaleidoCount", currentKaleidoCount);
+	}
+
 	public void UpSpeed ()
 	{
 		currentSpeed = Mathf.Clamp(currentSpeed + Time.deltaTime, 0f, 100f);

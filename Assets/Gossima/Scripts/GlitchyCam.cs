@@ -18,4 +18,11 @@ public class GlitchyCam : Filter
 		material.SetFloat("_gain", gain);
 		material.SetFloat("_intensity", intensity);
 	}
+
+	public void Reset ()
+	{
+		deform = 0.1f;
+		gain = 1f;
+		intensity = 1f;
+	}
 }

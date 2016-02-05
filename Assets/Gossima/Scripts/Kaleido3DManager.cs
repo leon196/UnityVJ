@@ -45,7 +45,7 @@ public class Kaleido3DManager : MonoBehaviour
 		createKaliedoscope();
 	}
 
-	public void Realign (){ // match uv to remap video 
+	public void Reset (){ // match uv to remap video 
 		foreach (GameObject holder in holders){		
 			foreach (Transform cube in holder.transform) {
 				Mesh mesh = cube.GetComponent<MeshFilter>().mesh;

@@ -102,13 +102,13 @@ using System;
         }
         catch (Exception e)
         {
-            //Debug.Log("ThreadAbortException"+e);
+            Debug.Log("ThreadAbortException"+e);
         }
         finally
         {
-            //Debug.Log("terminating thread - clearing handlers");
-            //Cancel();
-            //Hashtable.Synchronized(AddressTable).Clear();
+            Debug.Log("terminating thread - clearing handlers");
+            Cancel();
+            Hashtable.Synchronized(AddressTable).Clear();
         }
 
     }

@@ -14,6 +14,14 @@ public class Splashes : Filter
 		currentDirectionColorRatio = material.GetFloat("_DirectionColorRatio");
 	}
 
+	public void Reset ()
+	{
+		currentSpeed = 0.5f;
+		currentDirectionColorRatio = 0f;
+		material.SetFloat("_Speed", currentSpeed);
+		material.SetFloat("_DirectionColorRatio", currentDirectionColorRatio);
+	}
+
 	public void UpSpeed ()
 	{
 		currentSpeed = Mathf.Clamp(currentSpeed + Time.deltaTime, 0.01f, 1f);
@@ -46,7 +54,7 @@ public class Splashes : Filter
 
 	public void SetDirectionColorRatio (float ratio) 
 	{
-		currentDirectionColorRatio = Mathf.Clamp(ratio, 0f, 1f);;
+		currentDirectionColorRatio = Mathf.Clamp(ratio, 0f, 1f);
 		material.SetFloat("_DirectionColorRatio", currentDirectionColorRatio);
 	}
 }

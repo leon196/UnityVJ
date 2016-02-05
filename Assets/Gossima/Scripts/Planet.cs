@@ -17,6 +17,12 @@ public class Planet : MonoBehaviour
 		transform.Rotate(10f * Time.deltaTime * Vector3.up);
 	}
 
+	public void Reset ()
+	{
+		uvScale = 1f;
+		material.SetFloat("_UVScale", uvScale);
+	}
+
 	public void IncrementUVScale ()
 	{
 		uvScale = Mathf.Clamp(uvScale + 1, 1, 12);
